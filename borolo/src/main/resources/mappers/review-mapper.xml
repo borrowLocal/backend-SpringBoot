@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.borolo.repository.ReviewDao">
+
+    <select id="findByUserTargetId" resultType="com.example.borolo.domain.Review">
+        SELECT * FROM Review WHERE user_target_id = #{user_target_id}
+    </select>
+
+    <select id="findByUserWriteId" resultType="com.example.borolo.domain.Review">
+        SELECT * FROM Review WHERE user_write_id = #{user_write_id}
+    </select>
+
+    <select id="findByRentalId" resultType="com.example.borolo.domain.Review">
+        SELECT * FROM Review WHERE rental_id = #{rental_id}
+    </select>
+
+    <insert id="insert" parameterType="com.example.borolo.domain.Review">
+		    INSERT INTO Review (content, rating, rental_id, user_write_id, user_target_id, created_at)
+		    VALUES (#{content}, #{rating}, #{rental_id}, #{user_write_id}, #{user_target_id}, NOW())
+	</insert>
+
+</mapper>
