@@ -1,23 +1,28 @@
 # backend-SpringBoot
 
-##  Eclipse에서 확인해야 할 주요 설정들
-# 1. Installed JREs 확인 및 설정
-Window > Preferences > Java > Installed JREs
-jdk-17
+## 1. Eclipse에서 확인해야 할 주요 설정
 
-# 2. Compiler 설정
-Window > Preferences > Java > Compiler
+### 1.1 JDK 설정 확인 (Installed JREs)  
+- 경로: `Window > Preferences > Java > Installed JREs`  
+- 사용 JDK: `jdk-17`
 
-Compiler compliance level을 JDK 버전에 맞게 설정
- = 17 버전
+### 1.2 컴파일러 설정 (Compiler)  
+- 경로: `Window > Preferences > Java > Compiler`  
+- 설정 값: `Compiler compliance level = 17`
 
-##  서버 접속
-http://localhost:8080/
+---
 
-아이디 : user
-비번 : 콘솔에 나오는 비번 값
+## 2. 서버 접속 정보
 
-##  swagger 접속
-http://localhost:8080/swagger-ui.html
-http://localhost:8080/swagger-ui/index.html
-둘 중 하나로 접속
+- URL: [http://localhost:8080/](http://localhost:8080/)  
+- 아이디: `user`  
+- 비밀번호: 콘솔에 출력되는 비밀번호 확인
+
+---
+
+## 3. Swagger 접속 경로
+
+다음 중 하나로 접속 가능합니다:
+
+- [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)  
+- [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
