@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.borolo.domain.Rental;
 import com.example.borolo.dto.request.RentalRequestDto;
+import com.example.borolo.dto.response.RentalPaymentResponseDto;
 import com.example.borolo.service.RentalService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -82,5 +83,16 @@ public class RentalController {
         return ResponseEntity.ok(applicants);
     }
     
-    
+    // 6. 결제 정보 조회
+    @GetMapping("/payments/{rental_id}")
+    @Operation(summary = "결제 정보 조회")
+    public ResponseEntity<RentalPaymentResponseDto> getPaymentInfo(@PathVariable int rental_id) {
+        try {
+            RentalPaymentResponseDto dto = rentalService.getRentalPaymentInfo(rental_id);
+            return ResponseEntity.ok(dto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
