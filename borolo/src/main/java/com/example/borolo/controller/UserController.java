@@ -53,7 +53,7 @@ public class UserController {
     @Operation(summary = "로그인")
     public ResponseEntity<Object> login(@RequestBody LoginRequestDto dto) {
         try {
-            User user = userService.login(dto);
+            String user = userService.login(dto);
             return ResponseEntity.ok(user); // 나중에 LoginResponseDto로 분리 가능
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());

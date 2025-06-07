@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.borolo.domain.User;
@@ -20,6 +21,7 @@ import com.example.borolo.repository.FavoriteDao;
 import com.example.borolo.repository.ItemDao;
 import com.example.borolo.repository.RentalDao;
 import com.example.borolo.repository.UserDao;
+import com.example.borolo.util.JwtUtil;
 
 
 
@@ -30,16 +32,20 @@ public class UserService {
     private final ItemDao itemDao;
     private final RentalDao rentalDao;
     private final FavoriteDao favoriteDao;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     // 인증 코드 저장용
     private final Map<String, String> verificationMap = new HashMap<>();
 
-    public UserService(UserDao userDao, ItemDao itemDao, RentalDao rentalDao, FavoriteDao favoriteDao) {
-        this.userDao = userDao;
-        this.itemDao = itemDao;
-        this.rentalDao = rentalDao;
-        this.favoriteDao = favoriteDao;
-    }
+    public UserService(UserDao userDao, ItemDao itemDao, RentalDao rentalDao, FavoriteDao favoriteDao, BCryptPasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+		this.userDao = userDao;
+		this.itemDao = itemDao;
+		this.rentalDao = rentalDao;
+		this.favoriteDao = favoriteDao;
+		this.passwordEncoder = passwordEncoder;
+		this.jwtUtil = jwtUtil;
+	}
 
     // 1. 회원가입
     public void registerUser(JoinRequestDto dto) {
@@ -53,7 +59,7 @@ public class UserService {
 
         User user = new User();
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setReal_name(dto.getReal_name());
         user.setNick_name(dto.getNick_name());
         user.setBirth_date(dto.getBirth_date());
@@ -65,18 +71,18 @@ public class UserService {
     }
 
     // 2. 로그인
-    public User login(LoginRequestDto dto) {
+    public String login(LoginRequestDto dto) {
         User user = userDao.findByEmail(dto.getEmail());
 
         if (user == null || user.getIs_deleted()) {
             throw new IllegalArgumentException("존재하지 않는 계정입니다.");
         }
 
-        if (!user.getPassword().equals(dto.getPassword())) {
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        return user;
+        return jwtUtil.generateToken(user.getUser_id().toString());
     }
     
     // 3. 비밀번호 재설정
@@ -87,7 +93,8 @@ public class UserService {
             throw new IllegalArgumentException("인증코드가 일치하지 않습니다.");
         }
 
-        userDao.updatePassword(dto.getEmail(), dto.getNew_password());
+        String encodedPassword = passwordEncoder.encode(dto.getNew_password());
+        userDao.updatePassword(dto.getEmail(), encodedPassword);
         verificationMap.remove(dto.getEmail());
     }
 
@@ -154,7 +161,7 @@ public class UserService {
             throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
         }
 
-        return user.getPassword().equals(dto.getPassword());
+        return passwordEncoder.matches(dto.getPassword(), user.getPassword());
     }
 
     // 7. 회원 탈퇴
