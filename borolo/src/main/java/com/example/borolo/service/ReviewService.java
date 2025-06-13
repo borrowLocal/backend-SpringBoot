@@ -26,6 +26,12 @@ public class ReviewService {
 
     // 1. 리뷰 작성
     public void writeReview(ReviewRequestDto dto, int writer_id) {
+    	
+        //자기 자신 평가 금지 검사
+        if (writer_id == dto.getUser_target_id()) {
+            throw new IllegalArgumentException("자기 자신에게 리뷰를 작성할 수 없습니다.");
+        }
+        
         if (reviewDao.findByRentalId(dto.getRental_id()) != null) {
             throw new IllegalArgumentException("이미 작성된 리뷰입니다.");
         }

@@ -24,6 +24,11 @@ public class ReportService {
 
     // 1. 신고 등록
     public void submitReport(ReportRequestDto dto, int reporter_id) {
+    	
+        if (reporter_id == dto.getTarget_user_id()) {
+            throw new IllegalArgumentException("자기 자신은 신고할 수 없습니다.");
+        }
+        
         Report report = new Report();
         report.setReporter_id(reporter_id);
         report.setTarget_user_id(dto.getTarget_user_id());

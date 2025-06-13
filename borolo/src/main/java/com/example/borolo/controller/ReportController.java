@@ -18,6 +18,7 @@ import com.example.borolo.service.ReportService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -34,7 +35,7 @@ public class ReportController {
     // 1. 신고 등록
     @PostMapping
     @Operation(summary = "신고 등록")
-    public ResponseEntity<Void> submitReport(@RequestParam int reporter_id, @RequestBody ReportRequestDto dto) {
+    public ResponseEntity<Void> submitReport(@RequestParam int reporter_id, @RequestBody @Valid ReportRequestDto dto) {
         try {
             reportService.submitReport(dto, reporter_id);
             return ResponseEntity.ok().build();

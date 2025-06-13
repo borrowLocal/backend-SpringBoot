@@ -6,29 +6,29 @@
 <mapper namespace="com.example.borolo.repository.UserDao">
 
     <insert id="insert" parameterType="com.example.borolo.domain.User">
-        INSERT INTO user (
+        INSERT INTO users (
             email, password, real_name, nick_name,
-            birth_date, rating, create_time, is_deleted
+            birth_date, rating, create_time
         ) VALUES (
             #{email}, #{password}, #{real_name}, #{nick_name},
-            #{birth_date}, #{rating}, #{create_time}, #{is_deleted}
+            #{birth_date}, #{rating}, #{create_time}
         )
     </insert>
 
     <select id="findByEmail" resultType="com.example.borolo.domain.User">
-        SELECT * FROM user WHERE email = #{email}
+        SELECT * FROM users WHERE email = #{email}
     </select>
 
     <select id="findByNickName" resultType="com.example.borolo.domain.User">
-        SELECT * FROM user WHERE nick_name = #{nick_name}
+        SELECT * FROM users WHERE nick_name = #{nick_name}
     </select>
 
     <select id="findById" resultType="com.example.borolo.domain.User">
-        SELECT * FROM user WHERE user_id = #{user_id}
+        SELECT * FROM users WHERE user_id = #{user_id}
     </select>
 
     <update id="update" parameterType="com.example.borolo.domain.User">
-        UPDATE user SET
+        UPDATE users SET
             password = #{password},
             real_name = #{real_name},
             nick_name = #{nick_name},
@@ -36,12 +36,11 @@
             birth_date = #{birth_date},
             rating = #{rating},
             create_time = #{create_time},
-            is_deleted = #{is_deleted}
         WHERE user_id = #{user_id}
     </update>
 
     <update id="updatePassword">
-        UPDATE user
+        UPDATE users
         SET password = #{password}
         WHERE email = #{email}
     </update>

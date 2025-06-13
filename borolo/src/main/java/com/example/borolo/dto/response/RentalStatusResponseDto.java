@@ -12,7 +12,16 @@ public class RentalStatusResponseDto {
     private String rental_status;
     private Boolean is_approved;
     private Boolean is_completed;
-    
+    private Integer deposit_amount;
+
+    public Integer getDeposit_amount() {
+        return deposit_amount;
+    }
+
+    public void setDeposit_amount(Integer deposit_amount) {
+        this.deposit_amount = deposit_amount;
+    }
+
 	public Integer getRental_id() {
 		return rental_id;
 	}

@@ -5,11 +5,19 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class RentalPaymentResponseDto {
-    private String renterNickName;
-    private String itemTitle;
-    private int pricePerDay;
-    private int depositAmount;
-    public String getRenterNickName() {
+	private String renterNickName;
+	private String itemTitle;
+	private int pricePerDay;
+	private int depositAmount;
+	private int rentalQuantity;
+	private LocalDate startDate;
+	private LocalDate endDate;
+	private LocalDate exceptedReturnAt;
+	private LocalDateTime meetingTime;
+	private String meetingLocation;
+	private int totalAmount; // 계산된 값
+	
+	public String getRenterNickName() {
 		return renterNickName;
 	}
 	public void setRenterNickName(String renterNickName) {
@@ -33,11 +41,11 @@ public class RentalPaymentResponseDto {
 	public void setDepositAmount(int depositAmount) {
 		this.depositAmount = depositAmount;
 	}
-	public int getTotalAmount() {
-		return totalAmount;
+	public int getRentalQuantity() {
+		return rentalQuantity;
 	}
-	public void setTotalAmount(int totalAmount) {
-		this.totalAmount = totalAmount;
+	public void setRentalQuantity(int rentalQuantity) {
+		this.rentalQuantity = rentalQuantity;
 	}
 	public LocalDate getStartDate() {
 		return startDate;
@@ -51,6 +59,12 @@ public class RentalPaymentResponseDto {
 	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
+	public LocalDate getExceptedReturnAt() {
+		return exceptedReturnAt;
+	}
+	public void setExceptedReturnAt(LocalDate exceptedReturnAt) {
+		this.exceptedReturnAt = exceptedReturnAt;
+	}
 	public LocalDateTime getMeetingTime() {
 		return meetingTime;
 	}
@@ -63,31 +77,11 @@ public class RentalPaymentResponseDto {
 	public void setMeetingLocation(String meetingLocation) {
 		this.meetingLocation = meetingLocation;
 	}
-	public String getDistrict() {
-		return district;
+	public int getTotalAmount() {
+		return totalAmount;
 	}
-	public void setDistrict(String district) {
-		this.district = district;
+	public void setTotalAmount(int totalAmount) {
+		this.totalAmount = totalAmount;
 	}
-	public BigDecimal getLat() {
-		return lat;
-	}
-	public void setLat(BigDecimal lat) {
-		this.lat = lat;
-	}
-	public BigDecimal getLng() {
-		return lng;
-	}
-	public void setLng(BigDecimal lng) {
-		this.lng = lng;
-	}
-	private int totalAmount;	
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private LocalDateTime meetingTime;
 
-    private String meetingLocation;   // 기존 텍스트 위치
-    private String district;          // 사용자 위치 구 단위
-    private BigDecimal lat;           // 위도
-    private BigDecimal lng;           // 경도
 }

@@ -4,18 +4,31 @@ package com.example.borolo.domain;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.NotNull;
+
 public class Rental {
     private Integer rental_id;
     private LocalDate start_date;
     private LocalDate end_date;
     private LocalDateTime meeting_time;
+    private LocalDate expected_return_at;
     private String meeting_location;
     private String rental_status;
     private Boolean is_approved;
     private Boolean is_completed;
+	private Integer rental_quantity;
     private Integer item_id;
     private Integer user_id;
 
+    public LocalDate getExpected_return_at() {
+		return expected_return_at;
+	}
+	public void setExpected_return_at(LocalDate expected_return_at) {
+		this.expected_return_at = expected_return_at;
+	}
+	public Integer getRental_quantity() { return rental_quantity; }
+	public void setRental_quantity(Integer rental_quantity) { this.rental_quantity = rental_quantity; }
+	
     public Integer getRental_id() { return rental_id; }
     public void setRental_id(Integer rental_id) { this.rental_id = rental_id; }
 

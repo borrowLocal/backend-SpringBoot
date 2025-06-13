@@ -1,20 +1,20 @@
 package com.example.borolo.service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.example.borolo.domain.Item;
 import com.example.borolo.domain.Rental;
-import com.example.borolo.domain.User;
-import com.example.borolo.domain.UserLocation;
 import com.example.borolo.dto.request.RentalRequestDto;
+import com.example.borolo.dto.response.RentalApplicationListResponseDto;
 import com.example.borolo.dto.response.RentalPaymentResponseDto;
+import com.example.borolo.dto.response.RentalStatusResponseDto;
 import com.example.borolo.repository.ItemDao;
 import com.example.borolo.repository.RentalDao;
 import com.example.borolo.repository.UserDao;
 import com.example.borolo.repository.UserLocationDao;
-
 
 
 @Service
@@ -31,7 +31,7 @@ public class RentalService {
         this.userLocationDao = userLocationDao;
     }
 
-    // 1. 대여 신청
+    // 1. 대여 신청 (모달)
     public void applyRental(RentalRequestDto dto, int user_id) {
         Item item = itemDao.findById(dto.getItem_id());
         if (item == null) {
@@ -45,87 +45,89 @@ public class RentalService {
         rental.setEnd_date(dto.getEnd_date());
         rental.setMeeting_location(dto.getMeeting_location());
         rental.setMeeting_time(dto.getMeeting_time());
-        rental.setRental_status("대기 중");
-        rental.setIs_approved(false);
-        rental.setIs_completed(false);
+        rental.setRental_quantity(dto.getRental_quantity()); //수량 추가
+        rental.setExpected_return_at(dto.getExpected_return_at()); //반납일 추가
+        rental.setRental_status("신청완료"); // 신청완료 , 대여중, 거절, 결제요청, 거래완료
+        rental.setIs_approved(false); //수락 여부
+        rental.setIs_completed(false); //거래 완료 여부
 
         rentalDao.insert(rental);
     }
 
-    // 2. 대여 상태 확인
-    public List<Rental> getRentalStatus(int user_id) {
+    // 2. 대여 내역 조회 
+    public List<RentalStatusResponseDto> getRentalStatus(int user_id) {
+    	
         return rentalDao.findByUserId(user_id);
     }
 
     // 3. 대여 수락
 	  public void approveRental(int rental_id) {
+		  
 	      Rental rental = rentalDao.findById(rental_id);
 	          if (rental == null) {
 	             throw new IllegalArgumentException("대여 신청이 존재하지 않습니다.");
 	          }
 	
-	          rentalDao.approveRental(rental_id);
-	      }
-	
-    // 4. 대여 완료
+	      rentalDao.approveRental(rental_id);
+	 }
+	  
+	// 4. 대여 거절 / 대여 거절 버튼 누르면 실행
+	  public void rejectRental(int rental_id) {
+		  
+	    Rental rental = rentalDao.findById(rental_id);
+	    if (rental == null) {
+	        throw new IllegalArgumentException("대여 신청이 존재하지 않습니다.");
+	    }
+
+	    rentalDao.rejectRental(rental_id);
+	}
+
+    // 5. 대여 상태 (rental_status -> "거래 완료") / 거래 완료 버튼을 누르면 실행 & 물품 관리 상태 영향
     public void completeRental(int rental_id) {
+    	
         Rental rental = rentalDao.findById(rental_id);
         if (rental == null) {
             throw new IllegalArgumentException("대여 정보가 없습니다.");
         }
         rentalDao.completeRental(rental_id);
-        rentalDao.updateStatus(rental_id, "완료됨");
     }
-
-    // 5. 물품의 신청자 목록 조회
-    public List<Rental> getApplicants(int item_id) {
+    
+    // 6. 대여 상태 (rental_status -> "대여중") / 결제 완료 버튼을 누르면 실행
+    public void startRenting(int rental_id) {
+    	
+        Rental rental = rentalDao.findById(rental_id);
+        if (rental == null) throw new IllegalArgumentException("대여 없음");
+        rentalDao.updateStatus(rental_id, "대여중");
+    }
+    
+    // 7. 대여 상태 (rental_status -> "대여 완료") / 물품 관리 상태에 영향을 받음
+    public void finishRenting(int rental_id) {
+    	
+        Rental rental = rentalDao.findById(rental_id);
+        if (rental == null) throw new IllegalArgumentException("대여 완료가 제대로 수행 되지 않음");
+        rentalDao.updateStatus(rental_id, "대여완료");
+    }
+    
+    // 8. 물품 요청(신청자) 목록 조회
+    public List<RentalApplicationListResponseDto> getApplicants(int item_id) {
         return rentalDao.findByItemId(item_id);
     }
 
-    // 6. 결제 물품 정보 조회
-	public RentalPaymentResponseDto getRentalPaymentInfo(int rental_id) {
-	    Rental rental = rentalDao.findById(rental_id);
-	    if (rental == null) {
-	        throw new IllegalArgumentException("대여 정보를 찾을 수 없습니다.");
-	    }
+    // 9. 결제 물품 정보 조회
+    public RentalPaymentResponseDto getRentalPaymentInfo(int rental_id) {
+    	
+        RentalPaymentResponseDto dto = rentalDao.findPaymentInfoByRentalId(rental_id);
+        if (dto == null) {
+            throw new IllegalArgumentException("대여 정보를 찾을 수 없습니다.");
+        }
 
-	    Item item = itemDao.findById(rental.getItem_id());
-	    if (item == null) {
-	        throw new IllegalArgumentException("물품 정보를 찾을 수 없습니다.");
-	    }
+        long days = ChronoUnit.DAYS.between(dto.getStartDate(), dto.getEndDate());
+        int totalAmount = dto.getPricePerDay() * (int) days + dto.getDepositAmount();
+        dto.setTotalAmount(totalAmount);
 
-	    User user = userDao.findById(item.getUser_id());
-	    if (user == null) {
-	        throw new IllegalArgumentException("대여자 정보를 찾을 수 없습니다.");
-	    }
-
-	    UserLocation location = userLocationDao.findByUserId(user.getUser_id());
-
-	    // 대여일 수 계산 (종료일 - 시작일)
-	    long days = java.time.temporal.ChronoUnit.DAYS.between(
-	        rental.getStart_date(), rental.getEnd_date());
-
-	    int totalAmount = item.getPrice_per_day() * (int) days + item.getDeposit_amount();
-
-	    RentalPaymentResponseDto dto = new RentalPaymentResponseDto();
-	    dto.setRenterNickName(user.getNick_name());
-	    dto.setItemTitle(item.getTitle());
-	    dto.setPricePerDay(item.getPrice_per_day());
-	    dto.setDepositAmount(item.getDeposit_amount());
-	    dto.setTotalAmount(totalAmount);
-	    dto.setStartDate(rental.getStart_date());
-	    dto.setEndDate(rental.getEnd_date());
-	    dto.setMeetingTime(rental.getMeeting_time());
-	    dto.setMeetingLocation(rental.getMeeting_location());
-
-	    if (location != null) {
-	        dto.setDistrict(location.getDistrict());
-	        dto.setLat(location.getLat());
-	        dto.setLng(location.getLng());
-	    }
-
-	    return dto;
-	}
+        return dto;
+    }
     
+
     
 }

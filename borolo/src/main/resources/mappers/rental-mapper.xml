@@ -5,40 +5,114 @@
 
 <mapper namespace="com.example.borolo.repository.RentalDao">
 
+	
     <select id="findById" resultType="com.example.borolo.domain.Rental">
         SELECT * FROM Rental WHERE rental_id = #{rental_id}
     </select>
 
-    <select id="findByUserId" resultType="com.example.borolo.domain.Rental">
-        SELECT * FROM Rental WHERE user_id = #{user_id}
+	<!-- 내 대역 내역 조회 API -->
+    <select id="findByUserId" resultType="com.example.borolo.dto.response.RentalStatusResponseDto">
+	    SELECT 
+	        r.rental_id,
+	        i.title AS item_title,
+	        u.nick_name AS renter_nick_name,
+	        r.start_date,
+	        r.end_date,
+	        r.rental_status,
+	        r.is_approved,
+	        r.is_completed,
+	        i.deposit_amount
+	    FROM Rental r
+	    JOIN USERS u ON r.user_id = u.user_id
+	    JOIN Item i ON r.item_id = i.item_id
+	    WHERE r.user_id = #{user_id}
     </select>
 
-    <select id="findByItemId" resultType="com.example.borolo.domain.Rental">
-        SELECT * FROM Rental WHERE item_id = #{item_id}
-    </select>
+	<!-- 대여 요청(신청자) 목록 조회 API -->
+	<select id="findByItemId" resultType="com.example.borolo.dto.response.RentalApplicationListResponseDto">
+	    SELECT 
+	        r.rental_id, 
+	        u.nick_name,
+	        u.rating,
+	        i.title,
+	        i.deposit_amount,
+	        i.price_per_day,
+	        r.rental_status,
+	        r.start_date,
+	        r.end_date,
+	        r.expected_return_at,
+	        r.rental_quantity,
+	        r.meeting_time,
+	        r.meeting_location
+	    FROM Rental r
+	    JOIN USERS u ON r.user_id = u.user_id
+	    JOIN Item i ON r.item_id = i.item_id
+	    WHERE r.item_id = #{item_id}
+	          AND r.rental_status = '신청완료'
+	</select>
 
-    <insert id="insert" parameterType="com.example.borolo.domain.Rental">
-        INSERT INTO Rental (
-            startDate, endDate, meetingTime, meetingLocation,
-            rental_status, isApproved, isCompleted, item_id, user_id
-        ) VALUES (
-            #{startDate}, #{endDate}, #{meetingTime}, #{meetingLocation},
-            #{rental_status}, #{isApproved}, #{isCompleted}, #{item_id}, #{user_id}
-        )
-    </insert>
+	<!-- 대여 신청 API -->
+	<insert id="insert" parameterType="com.example.borolo.domain.Rental">
+	    INSERT INTO Rental (
+	        start_date, end_date, meeting_time, meeting_location,
+	        rental_status, is_approved, is_completed, item_id, user_id,
+	        rental_quantity, expected_return_at
+	    ) VALUES (
+	        #{start_date}, #{end_date}, #{meeting_time}, #{meeting_location},
+	        #{rental_status}, #{is_approved}, #{is_completed}, #{item_id}, #{user_id},
+	        #{rental_quantity}, #{expected_return_at}
+	    )
+	</insert>
 
+	<!-- 대여 상태(rental_status) 변경 API -->
     <update id="updateStatus">
 		    UPDATE Rental
 		    SET rental_status = #{rental_status}
 		    WHERE rental_id = #{rental_id}
-		</update>
+	</update>
 
-    <update id="approveRental">
-        UPDATE Rental SET isApproved = true WHERE rental_id = #{rental_id}
-    </update>
+	<!-- 대여 수락 API -->
+	<update id="approveRental">
+	    UPDATE Rental
+	    SET is_approved = '1',
+	        rental_status = '결제요청'
+	    WHERE rental_id = #{rental_id}
+	</update>
 
-    <update id="completeRental">
-        UPDATE Rental SET isCompleted = true WHERE rental_id = #{rental_id}
-    </update>
+	<!-- 대여 거절 API -->
+	<update id="rejectRental">
+	    UPDATE Rental
+	    SET is_approved = '0',
+	        rental_status = '거절'
+	    WHERE rental_id = #{rental_id}
+	</update>
+
+	<!-- 대여 상태 (rental_status -> "거래 완료") API -->
+	<update id="completeRental">
+	    UPDATE Rental
+	    SET is_completed = '1',
+	        rental_status = '거래완료'
+	    WHERE rental_id = #{rental_id}
+	</update>
+
+	<!-- 결제 정보 조회 API -->
+	<select id="findPaymentInfoByRentalId" parameterType="int"
+	        resultType="com.example.borolo.dto.response.RentalPaymentResponseDto">
+	    SELECT 
+	        u.nick_name             AS renterNickName,
+	        i.title                 AS itemTitle,
+	        i.price_per_day         AS pricePerDay,
+	        i.deposit_amount        AS depositAmount,
+	        r.start_date            AS startDate,
+	        r.end_date              AS endDate,
+	        r.rental_quantity       AS rentalQuantity,
+	        r.expected_return_at    AS exceptedReturnAt,
+	        r.meeting_time          AS meetingTime,
+	        r.meeting_location      AS meetingLocation
+	    FROM Rental r
+	    JOIN Item i ON r.item_id = i.item_id
+	    JOIN USERS u ON i.user_id = u.user_id
+	    WHERE r.rental_id = #{rental_id}
+	</select>
 
 </mapper>

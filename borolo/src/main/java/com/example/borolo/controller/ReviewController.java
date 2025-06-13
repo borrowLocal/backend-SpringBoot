@@ -18,6 +18,7 @@ import com.example.borolo.service.ReviewService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -33,7 +34,7 @@ public class ReviewController {
     // 1. 리뷰 작성
     @PostMapping
     @Operation(summary = "리뷰 작성")
-    public ResponseEntity<Void> writeReview(@RequestParam int user_id, @RequestBody ReviewRequestDto dto) {
+    public ResponseEntity<Void> writeReview(@RequestParam int user_id, @RequestBody @Valid ReviewRequestDto dto) {
         try {
             reviewService.writeReview(dto, user_id);
             return ResponseEntity.ok().build();

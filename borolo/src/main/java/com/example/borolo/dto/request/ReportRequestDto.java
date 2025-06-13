@@ -1,9 +1,14 @@
 package com.example.borolo.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class ReportRequestDto {
     private Integer rental_id;
     private Integer target_user_id;
+    
+    @NotBlank(message = "신고 사유는 필수입니다.")
+    @Size(min = 10, message = "신고 사유는 최소 10자 이상이어야 합니다.")
     private String reason;
     
 	public Integer getRental_id() {

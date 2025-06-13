@@ -1,9 +1,14 @@
 package com.example.borolo.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -11,13 +16,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.borolo.domain.Rental;
 import com.example.borolo.dto.request.RentalRequestDto;
+import com.example.borolo.dto.response.RentalApplicationListResponseDto;
 import com.example.borolo.dto.response.RentalPaymentResponseDto;
+import com.example.borolo.dto.response.RentalStatusResponseDto;
 import com.example.borolo.service.RentalService;
+import com.example.borolo.validator.RentalValidator;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 
 
@@ -25,34 +33,53 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/rentals")
 @Tag(name = "대여 관리", description = "대여 관련 API")
 public class RentalController {
+	
     private final RentalService rentalService;
-
-    public RentalController(RentalService rentalService) {
+    private final RentalValidator rentalValidator;
+    
+    public RentalController(RentalService rentalService, RentalValidator rentalValidator) {
         this.rentalService = rentalService;
+        this.rentalValidator = rentalValidator;
     }
 
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(rentalValidator);
+    }
+    
     // 1. 대여 신청
     @PostMapping
     @Operation(summary = "대여 신청")
-    public ResponseEntity<Void> applyRental(@RequestBody RentalRequestDto dto) {
-        try {
+    public ResponseEntity<?> applyRental(@Valid @RequestBody RentalRequestDto dto, Errors errors) {
+    	 if (errors.hasErrors()) {
+		    String errorMsg = errors.getAllErrors().stream()
+		            .map(DefaultMessageSourceResolvable::getDefaultMessage)
+		            .collect(Collectors.joining(", "));
+		    return ResponseEntity.badRequest().body(errorMsg);
+    	}
+    	 
+    	try {
             rentalService.applyRental(dto, dto.getUser_id());
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("대여 신청 처리되었습니다.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
-    // 2. 내 대여 상태 조회
+    // 2. 내 대여 내역 조회 
     @GetMapping("/status/{user_id}")
-    @Operation(summary = "내 대여 상태 조회")
-    public ResponseEntity<List<Rental>> getRentalStatus(@PathVariable int user_id) {
-        List<Rental> rentals = rentalService.getRentalStatus(user_id);
-        return ResponseEntity.ok(rentals);
+    @Operation(summary = "내 대여 내역 조회")
+    public ResponseEntity<List<RentalStatusResponseDto>> getRentalStatus(@PathVariable int user_id) {
+    	try {
+	        List<RentalStatusResponseDto> rentals = rentalService.getRentalStatus(user_id);
+	        return ResponseEntity.ok(rentals);
+	    }catch (IllegalArgumentException e) {
+			 return ResponseEntity.notFound().build();
+		 }
     }
 
     // 3. 대여 수락
-    @PutMapping("/approve/{rental_id}")
+    @PutMapping("/status/approve/{rental_id}")
     @Operation(summary = "대여 수락")
     public ResponseEntity<Void> approveRental(@PathVariable int rental_id) {
         try {
@@ -63,9 +90,33 @@ public class RentalController {
         }
     }
 
-    // 4. 대여 완료 처리
-    @PutMapping("/complete/{rental_id}")
-    @Operation(summary = "대여 완료 처리")
+    // 4. 대여 거절
+    @PutMapping("/status/reject/{rental_id}")
+    @Operation(summary = "대여 거절")
+    public ResponseEntity<Void> rejectRental(@PathVariable int rental_id) {
+        try {
+            rentalService.rejectRental(rental_id);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // 5. 대여중 처리 (결제 완료 시점)
+    @PutMapping("/status/start/{rental_id}")
+    @Operation(summary = "대여중 rental_status 처리")
+    public ResponseEntity<Void> startRenting(@PathVariable int rental_id) {
+    	try {
+            rentalService.startRenting(rental_id); // 상태만 '대여중'
+            return ResponseEntity.ok().build();
+    	} catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    // 6. 거래 완료 처리 (rental_status -> "거래 완료")
+    @PutMapping("/status/complete/{rental_id}")
+    @Operation(summary = "거래 완료 처리")
     public ResponseEntity<Void> completeRental(@PathVariable int rental_id) {
         try {
             rentalService.completeRental(rental_id);
@@ -75,15 +126,31 @@ public class RentalController {
         }
     }
 
-    // 5. 대여 신청자 목록 
+    // 7. 대여 완료 처리 (rental_status -> "대여 완료") / 물품 관리 상태 영향 미침
+    @PutMapping("/status/finish/{rental_id}")
+    @Operation(summary = "대여 완료 rental_status 처리")
+    public ResponseEntity<Void> finishRenting(@PathVariable int rental_id) {
+    	try {
+            rentalService.finishRenting(rental_id); // 상태만 '대여완료'
+            return ResponseEntity.ok().build();
+    	} catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // 8. 대여 요청(신청자) 목록
     @GetMapping("/applicants/{item_id}")
-    @Operation(summary = "대여 신청자 목록 조회")
-    public ResponseEntity<List<Rental>> getApplicants(@PathVariable int item_id) {
-        List<Rental> applicants = rentalService.getApplicants(item_id);
-        return ResponseEntity.ok(applicants);
+    @Operation(summary = "대여 요청(신청자) 목록 조회")
+    public ResponseEntity<List<RentalApplicationListResponseDto>> getApplicants(@PathVariable int item_id) {
+    	 try {
+	        List<RentalApplicationListResponseDto> applicants = rentalService.getApplicants(item_id);
+	        return ResponseEntity.ok(applicants);
+    	 }catch (IllegalArgumentException e) {
+    		 return ResponseEntity.notFound().build();
+    	 }
     }
     
-    // 6. 결제 정보 조회
+    // 9. 결제 정보 조회
     @GetMapping("/payments/{rental_id}")
     @Operation(summary = "결제 정보 조회")
     public ResponseEntity<RentalPaymentResponseDto> getPaymentInfo(@PathVariable int rental_id) {
@@ -94,5 +161,6 @@ public class RentalController {
             return ResponseEntity.notFound().build();
         }
     }
+
 
 }
