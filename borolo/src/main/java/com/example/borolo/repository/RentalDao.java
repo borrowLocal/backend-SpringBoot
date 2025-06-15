@@ -22,10 +22,11 @@ public interface RentalDao {
     void insert(Rental rental); // 대여 신청
     void approveRental(int rental_id); // 대여 수락
     void rejectRental(int rental_id); // 대여 거절
-    void completeRental(int rental_id); // 대여 상태 처리 (거래 완료) 
+    void completeRental(int rental_id); // 대여 상태 처리 (대여 완료) 
     
+    Rental findOngoingRentalByItemId(int item_id); //rental_id 찾기
     Rental findById(int rental_id); 
     int countByUserId(int user_id);
     void updateStatus(@Param("rental_id") int rental_id, @Param("rental_status") String status); 
-    
+
 }

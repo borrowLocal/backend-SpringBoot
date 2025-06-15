@@ -56,14 +56,6 @@ public class RentalValidator implements Validator {
             }
         }
 
- 
-        // 4. rental_id 존재 여부 (rental_id가 DTO에 있다면)
-        if (dto.getItem_id() != null) {
-            if (rentalDao.findById(dto.getItem_id()) == null) {
-                errors.rejectValue("rental_id", "invalid.rental_id", "해당 아이템이 존재하지 않습니다.");
-            }
-        }
-
         // 5. 반환일(expected_return_at)이 종료일(end_date) 이후여야 한다
         if (dto.getExpected_return_at() != null && dto.getEnd_date() != null) {
             if (dto.getExpected_return_at().isBefore(dto.getEnd_date()) || dto.getExpected_return_at().isEqual(dto.getEnd_date())) {

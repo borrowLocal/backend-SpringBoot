@@ -52,6 +52,10 @@ public class RentalService {
         rental.setIs_completed(false); //거래 완료 여부
 
         rentalDao.insert(rental);
+        
+        // Item 상태를 '거래요청'으로 업데이트
+        itemDao.updateItemStatusToRequested(rental.getItem_id() , "거래요청");
+
     }
 
     // 2. 대여 내역 조회 
@@ -80,32 +84,33 @@ public class RentalService {
 	    }
 
 	    rentalDao.rejectRental(rental_id);
+	    
+        // Item 상태를 '거래가능'으로 업데이트	
+        itemDao.updateItemStatusToRequested(rental.getItem_id() , "거래가능");
 	}
 
-    // 5. 대여 상태 (rental_status -> "거래 완료") / 거래 완료 버튼을 누르면 실행 & 물품 관리 상태 영향
-    public void completeRental(int rental_id) {
-    	
-        Rental rental = rentalDao.findById(rental_id);
-        if (rental == null) {
-            throw new IllegalArgumentException("대여 정보가 없습니다.");
-        }
-        rentalDao.completeRental(rental_id);
-    }
+    // 5. 대여 상태 (rental_status -> "대여 완료")
+	  public void completeRentalByItemId(int item_id) {
+		  
+	    Rental rental = rentalDao.findOngoingRentalByItemId(item_id);
+	    if (rental == null) {	
+	        throw new IllegalArgumentException("대여중인 거래가 없습니다.");
+	    }
+
+	    rentalDao.completeRental(rental.getRental_id());
+	    itemDao.updateItemStatusToRequested(item_id, "완료");
+	}
     
     // 6. 대여 상태 (rental_status -> "대여중") / 결제 완료 버튼을 누르면 실행
     public void startRenting(int rental_id) {
     	
         Rental rental = rentalDao.findById(rental_id);
         if (rental == null) throw new IllegalArgumentException("대여 없음");
+        
         rentalDao.updateStatus(rental_id, "대여중");
-    }
-    
-    // 7. 대여 상태 (rental_status -> "대여 완료") / 물품 관리 상태에 영향을 받음
-    public void finishRenting(int rental_id) {
-    	
-        Rental rental = rentalDao.findById(rental_id);
-        if (rental == null) throw new IllegalArgumentException("대여 완료가 제대로 수행 되지 않음");
-        rentalDao.updateStatus(rental_id, "대여완료");
+        
+        // Item 상태를 '대여중'으로 업데이트	
+        itemDao.updateItemStatusToRequested(rental.getItem_id() , "대여중");
     }
     
     // 8. 물품 요청(신청자) 목록 조회
@@ -121,7 +126,7 @@ public class RentalService {
             throw new IllegalArgumentException("대여 정보를 찾을 수 없습니다.");
         }
 
-        long days = ChronoUnit.DAYS.between(dto.getStartDate(), dto.getEndDate());
+        long days = ChronoUnit.DAYS.between(dto.getStartDate(), dto.getEndDate()) + 1;
         int totalAmount = dto.getPricePerDay() * (int) days + dto.getDepositAmount();
         dto.setTotalAmount(totalAmount);
 

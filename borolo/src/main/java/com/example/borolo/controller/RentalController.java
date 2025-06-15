@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
@@ -61,8 +62,11 @@ public class RentalController {
     	try {
             rentalService.applyRental(dto, dto.getUser_id());
             return ResponseEntity.ok("대여 신청 처리되었습니다.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
+    	} catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage()); // 상세 메시지 반환
+        } catch (Exception e) {
+            e.printStackTrace(); // 서버 콘솔에 전체 로그 출력
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류 발생: " + e.getMessage());
         }
     }
 
@@ -104,7 +108,7 @@ public class RentalController {
 
     // 5. 대여중 처리 (결제 완료 시점)
     @PutMapping("/status/start/{rental_id}")
-    @Operation(summary = "대여중 rental_status 처리")
+    @Operation(summary = "대여중 상태 처리")
     public ResponseEntity<Void> startRenting(@PathVariable int rental_id) {
     	try {
             rentalService.startRenting(rental_id); // 상태만 '대여중'
@@ -113,30 +117,7 @@ public class RentalController {
             return ResponseEntity.notFound().build();
         }
     }
-    
-    // 6. 거래 완료 처리 (rental_status -> "거래 완료")
-    @PutMapping("/status/complete/{rental_id}")
-    @Operation(summary = "거래 완료 처리")
-    public ResponseEntity<Void> completeRental(@PathVariable int rental_id) {
-        try {
-            rentalService.completeRental(rental_id);
-            return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
 
-    // 7. 대여 완료 처리 (rental_status -> "대여 완료") / 물품 관리 상태 영향 미침
-    @PutMapping("/status/finish/{rental_id}")
-    @Operation(summary = "대여 완료 rental_status 처리")
-    public ResponseEntity<Void> finishRenting(@PathVariable int rental_id) {
-    	try {
-            rentalService.finishRenting(rental_id); // 상태만 '대여완료'
-            return ResponseEntity.ok().build();
-    	} catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
 
     // 8. 대여 요청(신청자) 목록
     @GetMapping("/applicants/{item_id}")

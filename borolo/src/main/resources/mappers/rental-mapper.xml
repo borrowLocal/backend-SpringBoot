@@ -10,6 +10,15 @@
         SELECT * FROM Rental WHERE rental_id = #{rental_id}
     </select>
 
+	<!-- item_id 기준으로 진행 중인 rental_id 가져오기 -->
+	<select id="findOngoingRentalByItemId" resultType="com.example.borolo.domain.Rental">
+	    SELECT * 
+	    FROM Rental
+	    WHERE item_id = #{item_id}
+	      AND rental_status = '대여중'
+	</select>
+
+
 	<!-- 내 대역 내역 조회 API -->
     <select id="findByUserId" resultType="com.example.borolo.dto.response.RentalStatusResponseDto">
 	    SELECT 
@@ -64,6 +73,7 @@
 	    )
 	</insert>
 
+
 	<!-- 대여 상태(rental_status) 변경 API -->
     <update id="updateStatus">
 		    UPDATE Rental
@@ -87,11 +97,11 @@
 	    WHERE rental_id = #{rental_id}
 	</update>
 
-	<!-- 대여 상태 (rental_status -> "거래 완료") API -->
+	<!-- 대여 상태 (rental_status -> "대여 완료") API -->
 	<update id="completeRental">
 	    UPDATE Rental
 	    SET is_completed = '1',
-	        rental_status = '거래완료'
+	        rental_status = '대여완료'
 	    WHERE rental_id = #{rental_id}
 	</update>
 
