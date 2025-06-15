@@ -8,9 +8,6 @@ public class ItemDetailResponseDto {
     private Integer price_per_day;
     private Integer deposit_amount;
     private String image_url;
-    private String location;
-    private String item_status;
-    private String category_name;
     private String owner_nick_name;
     private Float owner_rating;
     
@@ -55,24 +52,6 @@ public class ItemDetailResponseDto {
 	}
 	public void setImage_url(String image_url) {
 		this.image_url = image_url;
-	}
-	public String getLocation() {
-		return location;
-	}
-	public void setLocation(String location) {
-		this.location = location;
-	}
-	public String getItem_status() {
-		return item_status;
-	}
-	public void setItem_status(String item_status) {
-		this.item_status = item_status;
-	}
-	public String getCategory_name() {
-		return category_name;
-	}
-	public void setCategory_name(String category_name) {
-		this.category_name = category_name;
 	}
 	public String getOwner_nick_name() {
 		return owner_nick_name;

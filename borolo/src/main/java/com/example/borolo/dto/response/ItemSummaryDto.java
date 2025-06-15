@@ -4,12 +4,20 @@ package com.example.borolo.dto.response;
 public class ItemSummaryDto {
     private Integer item_id;
     private String title;
-    private Integer quantity;
+    private String description;
+	private Integer quantity;
+    private Integer deposit_amount;
     private Integer price_per_day;
     private String image_url;
-    private String location;
     private String item_status;
+    private int rented_quantity;
     
+    public Integer getDeposit_amount() {
+		return deposit_amount;
+	}
+	public void setDeposit_amount(Integer deposit_amount) {
+		this.deposit_amount = deposit_amount;
+	}
 	public Integer getItem_id() {
 		return item_id;
 	}
@@ -40,11 +48,17 @@ public class ItemSummaryDto {
 	public void setImage_url(String image_url) {
 		this.image_url = image_url;
 	}
-	public String getLocation() {
-		return location;
+	public String getDescription() {
+		return description;
 	}
-	public void setLocation(String location) {
-		this.location = location;
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public int getRented_quantity() {
+		return rented_quantity;
+	}
+	public void setRented_quantity(int rented_quantity) {
+		this.rented_quantity = rented_quantity;
 	}
 	public String getItem_status() {
 		return item_status;

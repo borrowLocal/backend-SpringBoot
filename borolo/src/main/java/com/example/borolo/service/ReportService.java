@@ -2,14 +2,11 @@ package com.example.borolo.service;
 
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.example.borolo.domain.Report;
 import com.example.borolo.dto.request.ReportRequestDto;
-import com.example.borolo.dto.response.ReportResponseDto;
 import com.example.borolo.repository.ReportDao;
 
 
@@ -39,15 +36,6 @@ public class ReportService {
         reportDao.insert(report);
     }
 
-    // 2. 받은 신고 조회
-    public List<ReportResponseDto> getReportsAboutUser(int user_id) {
-        List<Report> reports = reportDao.findByTargetUserId(user_id);
+    // 2. 신고 모달 정보 조회
 
-        return reports.stream().map(report -> {
-            ReportResponseDto dto = new ReportResponseDto();
-            dto.setReason(report.getReason());
-            dto.setCreated_at(report.getCreated_at());
-            return dto;
-        }).collect(Collectors.toList());
-    }
 }

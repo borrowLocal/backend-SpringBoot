@@ -4,14 +4,40 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.borolo.repository.ItemDao">
-
+	<!-- 물품 단일 조회 API -->
     <select id="findById" resultType="com.example.borolo.domain.Item">
         SELECT * FROM Item WHERE item_id = #{item_id}
     </select>
+	
+	<!-- 등록 물품 조회 API -->
+	<select id="findItemSummaryByUserId" resultType="com.example.borolo.dto.response.ItemSummaryDto">
+	    SELECT 
+	        i.item_id,
+	        i.title,
+	        i.description,
+	        i.quantity,
+	        i.deposit_amount,
+	        i.price_per_day,
+	        i.image_url,
+	        i.item_status,
+	        i.quantity AS total_quantity,
+	        (
+	            SELECT NVL(SUM(r.rental_quantity), 0)
+	            FROM Rental r
+	            WHERE r.item_id = i.item_id
+	              AND r.rental_status = '대여중'
+	        ) AS rented_quantity
+	    FROM Item i
+	    WHERE i.user_id = #{user_id}
+	</select>
 
-    <select id="findByUserId" resultType="com.example.borolo.domain.Item">
-        SELECT * FROM Item WHERE user_id = #{user_id}
-    </select>
+	<!-- itemStatus 거래요청 API -->
+	<update id="updateItemStatusToRequested">
+	    UPDATE Item
+    	SET item_status = #{status}
+	    WHERE item_id = #{item_id}
+	</update>
+
 
     <select id="findByCategoryId" resultType="com.example.borolo.domain.Item">
         SELECT * FROM Item WHERE category_id = #{category_id}
@@ -25,18 +51,30 @@
         SELECT COUNT(*) FROM Item WHERE user_id = #{user_id}
     </select>
 
-    <insert id="insert" parameterType="com.example.borolo.domain.Item">
+	<!-- 위치 기반 전체 물품 조회 + 카테고리 필터링 API -->
+	<select id="findByLocation" parameterType="string" resultType="com.example.borolo.dto.response.ItemListResponseDto">
+		SELECT item_id, title, image_url, update_time
+		    FROM Item
+		    WHERE location = #{location}
+		    <if test="category_id != null">
+		        AND category_id = #{category_id}
+		    </if>
+	</select>
+
+	<!-- 물품 등록 API -->
+    <insert id="insert" parameterType="com.example.borolo.dto.request.RegisterItemRequestDto">
         INSERT INTO Item (
             title, description, price_per_day, deposit_amount, quantity,
             image_url, location, item_status, create_time, update_time,
             user_id, category_id
         ) VALUES (
             #{title}, #{description}, #{price_per_day}, #{deposit_amount}, #{quantity},
-            #{image_url}, #{location}, #{item_status}, NOW(), NOW(),
+            #{image_url}, #{location}, #{item_status}, SYSDATE, SYSDATE,
             #{user_id}, #{category_id}
         )
     </insert>
 
+	<!-- 물품 수정 API -->
     <update id="update" parameterType="com.example.borolo.domain.Item">
         UPDATE Item SET
             title = #{title},
@@ -45,14 +83,17 @@
             deposit_amount = #{deposit_amount},
             quantity = #{quantity},
             image_url = #{image_url},
-            location = #{location},
             item_status = #{item_status},
-            update_time = NOW()
+            update_time = SYSDATE
         WHERE item_id = #{item_id}
     </update>
 
+	<!-- 물품 삭제 API -->
     <delete id="delete">
-        DELETE FROM Item WHERE item_id = #{item_id}
+        DELETE FROM Item 
+        	WHERE item_id = #{item_id}
+        	AND item_status != '대여중' 
+        	AND item_status != '거래요청'
     </delete>
 
 </mapper>

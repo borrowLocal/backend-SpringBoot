@@ -8,7 +8,7 @@ public class UpdateItemRequestDto {
     private Integer price_per_day;
     private Integer deposit_amount;
     private String image_url;
-    private String location;
+    private String location; // 필요 없지 않나
     private Integer user_id;
     
 	public String getTitle() {

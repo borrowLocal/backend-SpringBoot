@@ -1,11 +1,7 @@
 package com.example.borolo.controller;
 
 
-import java.util.List;
-
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.borolo.dto.request.ReportRequestDto;
-import com.example.borolo.dto.response.ReportResponseDto;
 import com.example.borolo.service.ReportService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,15 +39,4 @@ public class ReportController {
         }
     }
 
-    // 2. 특정 유저가 받은 신고 목록 조회
-    @GetMapping("/target/{user_id}")
-    @Operation(summary = "신고 목록 조회")
-    public ResponseEntity<List<ReportResponseDto>> getReportsAboutUser(@PathVariable int user_id) {
-        try {
-            List<ReportResponseDto> reports = reportService.getReportsAboutUser(user_id);
-            return ResponseEntity.ok(reports);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
 }

@@ -12,14 +12,10 @@
     <select id="findByReporterId" resultType="com.example.borolo.domain.Report">
         SELECT * FROM Report WHERE reporter_id = #{reporter_id}
     </select>
-
-    <select id="findByTargetUserId" resultType="com.example.borolo.domain.Report">
-        SELECT * FROM Report WHERE target_user_id = #{target_user_id}
-    </select>
     
     <select id="findAll" resultType="com.example.borolo.domain.Report">
 		    SELECT * FROM Report ORDER BY created_at DESC
-		</select>
+	</select>
 
     <insert id="insert" parameterType="com.example.borolo.domain.Report">
         INSERT INTO Report (reporter_id, target_user_id, rental_id, reason, created_at)
