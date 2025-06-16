@@ -3,19 +3,17 @@ package com.example.borolo.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.example.borolo.domain.Item;
-import com.example.borolo.domain.ItemCategory;
 import com.example.borolo.domain.User;
 import com.example.borolo.dto.request.RegisterItemRequestDto;
 import com.example.borolo.dto.request.UpdateItemRequestDto;
 import com.example.borolo.dto.response.ItemDetailResponseDto;
 import com.example.borolo.dto.response.ItemListResponseDto;
 import com.example.borolo.dto.response.ItemSummaryDto;
-import com.example.borolo.repository.ItemCategoryDao;
+import com.example.borolo.repository.FavoriteDao;
 import com.example.borolo.repository.ItemDao;
 import com.example.borolo.repository.UserDao;
 
@@ -25,11 +23,13 @@ import com.example.borolo.repository.UserDao;
 public class ItemService {
 
     private final ItemDao itemDao;
-    private final UserDao userDao;
-
-    public ItemService(ItemDao itemDao, UserDao userDao) {
+    private final UserDao userDao; 
+    private final FavoriteDao favoriteDao;
+    
+    public ItemService(ItemDao itemDao, UserDao userDao , FavoriteDao favoriteDao) {
         this.itemDao = itemDao;
         this.userDao = userDao;
+        this.favoriteDao = favoriteDao;
     }
     
 	// 1. 물품 등록
@@ -68,7 +68,7 @@ public class ItemService {
     }
 
 	// 3. 물품 상세 조회 
-    public ItemDetailResponseDto getItemDetail(int item_id) {
+    public ItemDetailResponseDto getItemDetail(int user_id, int item_id) {
         Item item = itemDao.findById(item_id);
         if (item == null) {
             throw new IllegalArgumentException("해당 물품을 찾을 수 없습니다.");
@@ -86,6 +86,9 @@ public class ItemService {
         dto.setOwner_nick_name(owner != null ? owner.getNick_name() : null);
         dto.setOwner_rating(owner != null ? owner.getRating() : null);
 
+        boolean isFavorited = favoriteDao.existsByUserIdAndItemId(user_id, item_id) > 0;
+        dto.setFavorited(isFavorited);
+        
         return dto;
     }
     

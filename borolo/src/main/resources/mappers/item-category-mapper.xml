@@ -16,15 +16,15 @@
     <insert id="insert" parameterType="com.example.borolo.domain.ItemCategory">
 		    INSERT INTO ItemCategory (category_name, category_group, sort)
 		    VALUES (#{category_name}, #{category_group}, #{sort})
-		</insert>
+	</insert>
 
-		<update id="update" parameterType="com.example.borolo.domain.ItemCategory">
-		    UPDATE ItemCategory SET
-		        category_name = #{category_name},
-		        category_group = #{category_group},
-		        sort = #{sort}
-		    WHERE category_id = #{category_id}
-		</update>
+	<update id="update" parameterType="com.example.borolo.domain.ItemCategory">
+	    UPDATE ItemCategory SET
+	        category_name = #{category_name},
+	        category_group = #{category_group},
+	        sort = #{sort}
+	    WHERE category_id = #{category_id}
+	</update>
 		
     <delete id="delete">
         DELETE FROM ItemCategory WHERE category_id = #{category_id}

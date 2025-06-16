@@ -17,6 +17,7 @@ public interface ItemDao {
     //위치기반전체물품조회
     List<ItemListResponseDto> findByLocation(@Param("location") String location, @Param("category_id") Integer category_id);
     List<ItemSummaryDto> findItemSummaryByUserId(@Param("user_id") int user_id); // 등록 물품 조회
+    List<ItemListResponseDto> findItemsByIds(@Param("itemIds") List<Integer> itemIds); //즐겨찾기된 아이템 list 조회
     
     void updateItemStatusToRequested(@Param("item_id") int item_id , @Param("status") String status); //대여신청자존재 -> item 상태 업뎃
     

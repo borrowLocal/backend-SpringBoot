@@ -10,7 +10,14 @@ public class ItemDetailResponseDto {
     private String image_url;
     private String owner_nick_name;
     private Float owner_rating;
+    private boolean isFavorited; //즐찾여부
     
+	public boolean isFavorited() {
+		return isFavorited;
+	}
+	public void setFavorited(boolean isFavorited) {
+		this.isFavorited = isFavorited;
+	}
 	public Integer getItem_id() {
 		return item_id;
 	}

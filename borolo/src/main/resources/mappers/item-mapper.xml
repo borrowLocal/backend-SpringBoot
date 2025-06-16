@@ -38,6 +38,15 @@
 	    WHERE item_id = #{item_id}
 	</update>
 
+	<!-- 즐겨찾기된 item 조회 API -->
+	<select id="findItemsByIds" parameterType="list" resultType="com.example.borolo.dto.response.ItemListResponseDto">
+	    SELECT item_id, title, image_url, update_time
+	    FROM item
+	    WHERE item_id IN
+	    <foreach item="id" collection="itemIds" open="(" separator="," close=")">
+	        #{id}
+	    </foreach>
+	</select>
 
     <select id="findByCategoryId" resultType="com.example.borolo.domain.Item">
         SELECT * FROM Item WHERE category_id = #{category_id}
