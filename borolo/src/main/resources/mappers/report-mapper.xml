@@ -17,9 +17,21 @@
 		    SELECT * FROM Report ORDER BY created_at DESC
 	</select>
 
+	<!-- 신고등록 API -->
     <insert id="insert" parameterType="com.example.borolo.domain.Report">
-        INSERT INTO Report (reporter_id, target_user_id, rental_id, reason, created_at)
-        VALUES (#{reporter_id}, #{target_user_id}, #{rental_id}, #{reason}, NOW())
+	    INSERT INTO Report (
+	        reporter_id,
+	        target_user_id,
+	        rental_id,
+	        reason,
+	        created_at
+	    ) VALUES (
+	        #{reporter_id},
+	        #{target_user_id},
+	        #{rental_id},
+	        #{reason},
+	        SYSDATE
+	    )
     </insert>
 
 </mapper>

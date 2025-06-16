@@ -136,9 +136,5 @@ public class ItemService {
         }
     }
     
-    //8. 신고 시 item_status 변경
-    public void reportItem(int item_id) {
-        itemDao.updateItemStatusToRequested(item_id, "신고");
-    }
 
 }
