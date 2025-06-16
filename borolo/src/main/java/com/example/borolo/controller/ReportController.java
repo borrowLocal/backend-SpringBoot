@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.borolo.dto.request.ReportRequestDto;
-import com.example.borolo.dto.response.ReportModalResponseDto;
+import com.example.borolo.dto.response.ReviewReportTargetDto;
 import com.example.borolo.service.ReportService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,15 +33,15 @@ public class ReportController {
   //1. 신고 모달 조회 rental_id , rental의 user_id
   @GetMapping("/item/{item_id}")
   @Operation(summary = "신고 모달 조회 - 제공자가 대여자 신고")
-  public ResponseEntity<ReportModalResponseDto> getReportTargetFromItem(@PathVariable int item_id) {
-      ReportModalResponseDto dto = reportService.getReportTargetFromItem(item_id);
+  public ResponseEntity<ReviewReportTargetDto> getReportTargetFromItem(@PathVariable int item_id) {
+      ReviewReportTargetDto dto = reportService.getReportTargetFromItem(item_id);
       return ResponseEntity.ok(dto);
   }
 
   @GetMapping("/rental/{rental_id}")
   @Operation(summary = "신고 모달 조회 - 대여자가 제공자 신고")
-  public ResponseEntity<ReportModalResponseDto> getReportTargetFromRental(@PathVariable int rental_id) {
-	  ReportModalResponseDto dto = reportService.getReportTargetFromRental(rental_id);
+  public ResponseEntity<ReviewReportTargetDto> getReportTargetFromRental(@PathVariable int rental_id) {
+	  ReviewReportTargetDto dto = reportService.getReportTargetFromRental(rental_id);
       return ResponseEntity.ok(dto);
   }
 

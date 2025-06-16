@@ -125,8 +125,8 @@
 	    WHERE r.rental_id = #{rental_id}
 	</select>
 	
-	<!-- 신고 모달 조회 제공자->대여자 API -->
-	<select id="findReportTargetInfoByItemId" resultType="com.example.borolo.dto.response.ReportModalResponseDto">
+	<!-- 신고,리뷰 모달 조회 제공자->대여자 API -->
+	<select id="findUserInfoByItemId" resultType="com.example.borolo.dto.response.ReviewReportTargetDto">
 	    SELECT
 	        rental_id AS rentalId,
 	        user_id AS targetUserId,
@@ -147,8 +147,8 @@
 	    WHERE ROWNUM = 1
 	</select>
 
-	<!-- 신고 모달 조회 대여자->제공자 API -->
-	<select id="findReportTargetInfoByRentalId" resultType="com.example.borolo.dto.response.ReportModalResponseDto">
+	<!-- 신고,리뷰 모달 조회 대여자->제공자 API -->
+	<select id="findUserInfoByRentalId" resultType="com.example.borolo.dto.response.ReviewReportTargetDto">
 	    SELECT 
 	        r.rental_id AS rentalId,
 	        i.user_id AS targetUserId,
@@ -160,5 +160,6 @@
 	    WHERE 
 	        r.rental_id = #{rentalId}
 	</select>
+	
 
 </mapper>

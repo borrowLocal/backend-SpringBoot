@@ -11,7 +11,7 @@ import com.example.borolo.domain.Rental;
 import com.example.borolo.dto.response.RentalApplicationListResponseDto;
 import com.example.borolo.dto.response.RentalPaymentResponseDto;
 import com.example.borolo.dto.response.RentalStatusResponseDto;
-import com.example.borolo.dto.response.ReportModalResponseDto;
+import com.example.borolo.dto.response.ReviewReportTargetDto;
 
 @Mapper
 public interface RentalDao {
@@ -25,9 +25,9 @@ public interface RentalDao {
     void approveRental(int rental_id); // 대여 수락
     void rejectRental(int rental_id); // 대여 거절
     void completeRental(int rental_id); // 대여 상태 처리 (대여 완료) 
-    Optional<ReportModalResponseDto> findReportTargetInfoByItemId(@Param("itemId") int itemId);
-    Optional<ReportModalResponseDto> findReportTargetInfoByRentalId(@Param("rentalId") int rentalId);
-
+    Optional<ReviewReportTargetDto> findUserInfoByItemId(@Param("itemId") int itemId);
+    Optional<ReviewReportTargetDto> findUserInfoByRentalId(@Param("rentalId") int rentalId);
+    
     Rental findOngoingRentalByItemId(int item_id); //rental_id 찾기
     Rental findById(int rental_id); 
     int countByUserId(int user_id);

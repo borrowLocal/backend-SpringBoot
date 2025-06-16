@@ -1,6 +1,6 @@
 package com.example.borolo.dto.response;
 
-public class ReportModalResponseDto {
+public class ReviewReportTargetDto {
     private Long rentalId;
     private Long targetUserId;
     private String nickname;
