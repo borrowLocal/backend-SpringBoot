@@ -21,7 +21,7 @@ import com.example.borolo.repository.FavoriteDao;
 import com.example.borolo.repository.ItemDao;
 import com.example.borolo.repository.RentalDao;
 import com.example.borolo.repository.UserDao;
-import com.example.borolo.util.JwtUtil;
+import com.example.borolo.JwtUtil;
 
 
 
