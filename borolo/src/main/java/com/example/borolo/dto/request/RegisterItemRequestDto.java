@@ -6,7 +6,6 @@ public class RegisterItemRequestDto {
     private Integer quantity;
     private Integer price_per_day;
     private Integer deposit_amount;
-    private String image_url;
     private String location;
     private Integer category_id;
     private Integer user_id;
@@ -40,12 +39,6 @@ public class RegisterItemRequestDto {
 	}
 	public void setDeposit_amount(Integer deposit_amount) {
 		this.deposit_amount = deposit_amount;
-	}
-	public String getImage_url() {
-		return image_url;
-	}
-	public void setImage_url(String image_url) {
-		this.image_url = image_url;
 	}
 	public String getLocation() {
 		return location;

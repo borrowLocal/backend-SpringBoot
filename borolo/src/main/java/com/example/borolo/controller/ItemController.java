@@ -4,6 +4,7 @@ package com.example.borolo.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.borolo.domain.Item;
 import com.example.borolo.dto.request.RegisterItemRequestDto;
@@ -43,11 +46,17 @@ public class ItemController {
     }
 
     // 1. 물품 등록
-    @PostMapping
-    @Operation(summary = "물품 등록")
-    public ResponseEntity<Void> registerItem(@RequestBody RegisterItemRequestDto dto) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "물품 등록 (이미지 포함)")
+    public ResponseEntity<Void> registerItem(
+            @RequestPart("dto") RegisterItemRequestDto dto,
+            @RequestPart("file") MultipartFile file) {
+    	
+        System.out.println("==== DTO 값 확인 ====");
+        System.out.println(dto.toString());
+        
         try {
-            itemService.registerItem(dto);
+            itemService.registerItem(dto, file);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
