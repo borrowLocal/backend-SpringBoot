@@ -1,6 +1,8 @@
 package com.example.borolo.controller;
 
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.borolo.dto.request.FavoriteRequestDto;
-import com.example.borolo.dto.response.FavoriteListResponseDto;
+import com.example.borolo.dto.response.ItemListResponseDto;
 import com.example.borolo.service.FavoriteService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,9 +35,9 @@ public class FavoriteController {
     // 즐겨찾기 추가
     @PostMapping
     @Operation(summary = "즐겨찾기 추가")
-    public ResponseEntity<Void> addFavorite(@RequestParam int user_id, @RequestBody FavoriteRequestDto dto) {
+    public ResponseEntity<Void> addFavorite(@RequestBody FavoriteRequestDto dto) {
         try {
-            favoriteService.addFavorite(dto, user_id);
+            favoriteService.addFavorite(dto.getUser_id(), dto.getItem_id());
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -56,8 +58,9 @@ public class FavoriteController {
 
     // 즐겨찾기 목록 조회
     @GetMapping("/{user_id}")
-    @Operation(summary = "즐겨찾기 목록 조회")
-    public ResponseEntity<FavoriteListResponseDto> getFavorites(@PathVariable int user_id) {
-        return ResponseEntity.ok(favoriteService.getFavorites(user_id));
+    @Operation(summary = "즐겨찾기 물품 목록 조회")
+    public ResponseEntity<List<ItemListResponseDto>> getFavoriteItems(@PathVariable("user_id") int userId) {
+        List<ItemListResponseDto> favoriteItems = favoriteService.getFavoriteItems(userId);
+        return ResponseEntity.ok(favoriteItems);
     }
 }

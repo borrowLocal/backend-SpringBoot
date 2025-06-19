@@ -1,15 +1,12 @@
 package com.example.borolo.service;
 
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.borolo.domain.Item;
-import com.example.borolo.dto.request.FavoriteRequestDto;
-import com.example.borolo.dto.response.FavoriteListResponseDto;
-import com.example.borolo.dto.response.ItemSummaryDto;
+import com.example.borolo.dto.response.ItemListResponseDto;
 import com.example.borolo.repository.FavoriteDao;
 import com.example.borolo.repository.ItemDao;
 
@@ -27,12 +24,11 @@ public class FavoriteService {
     }
 
     // 즐겨찾기 등록
-    public void addFavorite(FavoriteRequestDto dto, int user_id) {
-        boolean exists = favoriteDao.exists(user_id, dto.getItem_id());
-        if (exists) {
+    public void addFavorite(int user_id, int item_id) {
+        if (favoriteDao.exists(user_id, item_id)) {
             throw new IllegalArgumentException("이미 즐겨찾기에 추가된 항목입니다.");
         }
-        favoriteDao.insertFavorite(user_id, dto.getItem_id());
+        favoriteDao.insertFavorite(user_id, item_id);
     }
 
     // 즐겨찾기 삭제
@@ -44,21 +40,15 @@ public class FavoriteService {
     }
 
     // 즐겨찾기 목록 조회
-    public FavoriteListResponseDto getFavorites(int user_id) {
-        List<Item> items = favoriteDao.findFavoritesByUserId(user_id);
+    public List<ItemListResponseDto> getFavoriteItems(int user_id) {
+        // 즐겨찾기된 item_id 목록 조회
+        List<Integer> favoriteItemIds = favoriteDao.findFavoriteItemIdsByUserId(user_id);
 
-        List<ItemSummaryDto> summaries = items.stream().map(item -> {
-            ItemSummaryDto dto = new ItemSummaryDto();
-            dto.setItem_id(item.getItem_id());
-            dto.setTitle(item.getTitle());
-            dto.setPrice_per_day(item.getPrice_per_day());
-            dto.setImage_url(item.getImage_url());
-            dto.setItem_status(item.getItem_status());
-            return dto;
-        }).collect(Collectors.toList());
+        if (favoriteItemIds == null || favoriteItemIds.isEmpty()) {
+            return Collections.emptyList();
+        }
 
-        FavoriteListResponseDto result = new FavoriteListResponseDto();
-        result.setFavorites(summaries);
-        return result;
+        // 해당 item_id들로 item 리스트 가져오기 (재사용)
+        return itemDao.findItemsByIds(favoriteItemIds);
     }
 }

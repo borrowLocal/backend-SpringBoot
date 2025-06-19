@@ -116,9 +116,10 @@ public class ItemController {
     // 6. 물품 상세 조회
     @GetMapping("/{item_id}")
     @Operation(summary = "물품 상세 조회")
-    public ResponseEntity<ItemDetailResponseDto> getItemDetail(@PathVariable int item_id) {
+    public ResponseEntity<ItemDetailResponseDto> getItemDetail(@PathVariable int item_id,
+            @RequestParam int user_id) {
         try {
-            ItemDetailResponseDto dto = itemService.getItemDetail(item_id);
+            ItemDetailResponseDto dto = itemService.getItemDetail(user_id, item_id);
             return ResponseEntity.ok(dto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
