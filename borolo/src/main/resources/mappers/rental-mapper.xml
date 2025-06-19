@@ -124,5 +124,42 @@
 	    JOIN USERS u ON i.user_id = u.user_id
 	    WHERE r.rental_id = #{rental_id}
 	</select>
+	
+	<!-- 신고,리뷰 모달 조회 제공자->대여자 API -->
+	<select id="findUserInfoByItemId" resultType="com.example.borolo.dto.response.ReviewReportTargetDto">
+	    SELECT
+	        rental_id AS rentalId,
+	        user_id AS targetUserId,
+	        nick_name AS nickname
+	    FROM (
+	        SELECT
+	            r.rental_id,
+	            u.user_id,
+	            u.nick_name
+	        FROM
+	            Rental r
+	        JOIN
+	            USERS u ON r.user_id = u.user_id
+	        WHERE
+	            r.item_id = #{itemId}
+	        ORDER BY r.rental_id DESC
+	    )
+	    WHERE ROWNUM = 1
+	</select>
+
+	<!-- 신고,리뷰 모달 조회 대여자->제공자 API -->
+	<select id="findUserInfoByRentalId" resultType="com.example.borolo.dto.response.ReviewReportTargetDto">
+	    SELECT 
+	        r.rental_id AS rentalId,
+	        i.user_id AS targetUserId,
+	        u.nick_name  AS nickname
+	    FROM 
+	        rental r
+	        JOIN item i ON r.item_id = i.item_id
+	        JOIN users u ON i.user_id = u.user_id
+	    WHERE 
+	        r.rental_id = #{rentalId}
+	</select>
+	
 
 </mapper>

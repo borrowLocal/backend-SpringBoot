@@ -145,12 +145,5 @@ public class ItemController {
         }
     }
     
-//    //9. 신고 버튼을 눌렀을 때 <- 신고 api 처리 후 수정
-//    @PutMapping("/report/{user_id}")
-//    @Operation(summary = "item 상태 변경 (신고관련)")
-//    public ResponseEntity<String> reportItem(@PathVariable int item_id) {
-//        itemService.reportItem(item_id);
-//        return ResponseEntity.ok("신고 처리 완료되었습니다.");
-//    }
 
 }
