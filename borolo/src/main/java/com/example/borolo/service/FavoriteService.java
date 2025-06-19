@@ -53,7 +53,6 @@ public class FavoriteService {
             dto.setTitle(item.getTitle());
             dto.setPrice_per_day(item.getPrice_per_day());
             dto.setImage_url(item.getImage_url());
-            dto.setLocation(item.getLocation());
             dto.setItem_status(item.getItem_status());
             return dto;
         }).collect(Collectors.toList());

@@ -89,7 +89,7 @@ public class RentalService {
         itemDao.updateItemStatusToRequested(rental.getItem_id() , "거래가능");
 	}
 
-    // 5. 대여 상태 (rental_status -> "대여 완료")
+    // 5. 대여 상태 (rental_status -> "(대여 완료 -> 거래 가능)수정")
 	  public void completeRentalByItemId(int item_id) {
 		  
 	    Rental rental = rentalDao.findOngoingRentalByItemId(item_id);
@@ -98,7 +98,7 @@ public class RentalService {
 	    }
 
 	    rentalDao.completeRental(rental.getRental_id());
-	    itemDao.updateItemStatusToRequested(item_id, "완료");
+	    itemDao.updateItemStatusToRequested(item_id, "거래가능");
 	}
     
     // 6. 대여 상태 (rental_status -> "대여중") / 결제 완료 버튼을 누르면 실행
