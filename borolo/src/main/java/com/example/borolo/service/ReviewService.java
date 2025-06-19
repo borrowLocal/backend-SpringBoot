@@ -7,21 +7,23 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.example.borolo.domain.Review;
-import com.example.borolo.domain.User;
 import com.example.borolo.dto.request.ReviewRequestDto;
+import com.example.borolo.dto.response.ReviewReportTargetDto;
 import com.example.borolo.dto.response.ReviewResponseDto;
+import com.example.borolo.repository.RentalDao;
 import com.example.borolo.repository.ReviewDao;
-import com.example.borolo.repository.UserDao;
+
+import jakarta.persistence.EntityNotFoundException;
 
 
 @Service
 public class ReviewService {
     private final ReviewDao reviewDao;
-    private final UserDao userDao;
-
-    public ReviewService(ReviewDao reviewDao, UserDao userDao) {
+    private final RentalDao rentalDao;
+    
+    public ReviewService(ReviewDao reviewDao,RentalDao rentalDao) {
         this.reviewDao = reviewDao;
-        this.userDao = userDao;
+        this.rentalDao = rentalDao;
     }
 
     // 1. 리뷰 작성
@@ -32,10 +34,6 @@ public class ReviewService {
             throw new IllegalArgumentException("자기 자신에게 리뷰를 작성할 수 없습니다.");
         }
         
-        if (reviewDao.findByRentalId(dto.getRental_id()) != null) {
-            throw new IllegalArgumentException("이미 작성된 리뷰입니다.");
-        }
-
         Review review = new Review();
         review.setContent(dto.getContent());
         review.setRating(dto.getRating());
@@ -48,25 +46,23 @@ public class ReviewService {
 
     // 2. 받은 리뷰 목록
     public List<ReviewResponseDto> getReviewsReceived(int user_id) {
-        List<Review> reviews = reviewDao.findByUserTargetId(user_id);
-        return toResponseDtoList(reviews);
+        return reviewDao.findByUserTargetId(user_id);
     }
 
     // 3. 작성한 리뷰 목록
     public List<ReviewResponseDto> getReviewsWritten(int user_id) {
-        List<Review> reviews = reviewDao.findByUserWriteId(user_id);
-        return toResponseDtoList(reviews);
+        return reviewDao.findByUserWriteId(user_id);
+    }
+    
+    //4. 제공자->대여자 리뷰모달 조회
+    public ReviewReportTargetDto getReviewTargetFromItem(int itemId) {
+        return rentalDao.findUserInfoByItemId(itemId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 item의 대여 정보가 없습니다."));
     }
 
-    private List<ReviewResponseDto> toResponseDtoList(List<Review> reviews) {
-        return reviews.stream().map(r -> {
-            ReviewResponseDto dto = new ReviewResponseDto();
-            User writer = userDao.findById(r.getUser_write_id());
-            dto.setWriter_nick_name(writer != null ? writer.getNick_name() : "알 수 없음");
-            dto.setContent(r.getContent());
-            dto.setRating(r.getRating());
-            dto.setCreated_at(r.getCreated_at());
-            return dto;
-        }).collect(Collectors.toList());
+    //5. 대여자->제공자 리뷰모달 조회
+    public ReviewReportTargetDto getReviewTargetFromRental(int rentalId) {
+        return rentalDao.findUserInfoByRentalId(rentalId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 rental의 정보가 없습니다."));
     }
 }
