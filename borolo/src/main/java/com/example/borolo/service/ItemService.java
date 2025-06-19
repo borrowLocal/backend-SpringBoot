@@ -1,10 +1,18 @@
 package com.example.borolo.service;
 
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
+
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.borolo.domain.Item;
 import com.example.borolo.domain.User;
@@ -14,6 +22,7 @@ import com.example.borolo.dto.response.ItemDetailResponseDto;
 import com.example.borolo.dto.response.ItemListResponseDto;
 import com.example.borolo.dto.response.ItemSummaryDto;
 import com.example.borolo.repository.FavoriteDao;
+
 import com.example.borolo.repository.ItemDao;
 import com.example.borolo.repository.UserDao;
 
@@ -33,10 +42,30 @@ public class ItemService {
     }
     
 	// 1. 물품 등록
-    public void registerItem(RegisterItemRequestDto dto) {
-
+    public void registerItem(RegisterItemRequestDto dto, MultipartFile file) {
+    	
         if (dto.getDeposit_amount() < dto.getPrice_per_day() * 0.1) {
             throw new IllegalArgumentException("보증금은 대여가의 10% 이상이어야 합니다.");
+        }
+
+        //이미지 저장
+        String imageUrl = null;
+        
+        try {
+            String uploadDir = System.getProperty("user.dir") + "/uploads/images";
+            Path uploadPath = Paths.get(uploadDir);
+            if (Files.notExists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            Path filepath = uploadPath.resolve(filename);
+            Files.copy(file.getInputStream(), filepath, StandardCopyOption.REPLACE_EXISTING);
+
+            imageUrl = "/uploads/images/" + filename; 
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         Item item = new Item();
@@ -45,7 +74,7 @@ public class ItemService {
         item.setPrice_per_day(dto.getPrice_per_day());
         item.setDeposit_amount(dto.getDeposit_amount());
         item.setQuantity(dto.getQuantity());
-        item.setImage_url(dto.getImage_url());
+        item.setImage_url(imageUrl);
         item.setLocation(dto.getLocation());
         item.setItem_status("거래가능");
         item.setCreate_time(LocalDateTime.now());
