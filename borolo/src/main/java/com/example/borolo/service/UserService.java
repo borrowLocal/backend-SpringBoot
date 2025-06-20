@@ -116,12 +116,12 @@ public class UserService {
         int favoriteCount = favoriteDao.countByUserId(user_id);
 
         UserProfileResponseDto dto = new UserProfileResponseDto();
-        dto.setReal_name(user.getReal_name());
+//        dto.setReal_name(user.getReal_name());
         dto.setNick_name(user.getNick_name());
         dto.setRating(user.getRating());
-        dto.setItem_count(itemCount);
-        dto.setRental_count(rentalCount);
-        dto.setFavorite_count(favoriteCount);
+//        dto.setItem_count(itemCount);
+//        dto.setRental_count(rentalCount);
+//        dto.setFavorite_count(favoriteCount);
 
         return dto;
     }

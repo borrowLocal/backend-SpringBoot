@@ -13,7 +13,7 @@ public class User {
     private LocalDate birth_date;
     private Float rating;
     private LocalDateTime create_time;
-    private Boolean is_deleted;
+    private Boolean is_deleted = false;
 
     public Integer getUser_id() { return user_id; }
     public void setUser_id(Integer user_id) { this.user_id = user_id; }
