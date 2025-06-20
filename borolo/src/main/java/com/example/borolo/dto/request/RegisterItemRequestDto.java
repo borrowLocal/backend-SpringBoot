@@ -1,14 +1,15 @@
 package com.example.borolo.dto.request;
 
+
 public class RegisterItemRequestDto {
     private String title;
     private String description;
     private Integer quantity;
     private Integer price_per_day;
     private Integer deposit_amount;
-    private String location;
-    private Integer category_id;
+    private String location; 
     private Integer user_id;
+    private Integer category_id;
     
 	public String getTitle() {
 		return title;
@@ -40,22 +41,23 @@ public class RegisterItemRequestDto {
 	public void setDeposit_amount(Integer deposit_amount) {
 		this.deposit_amount = deposit_amount;
 	}
-	public String getLocation() {
-		return location;
-	}
-	public void setLocation(String location) {
-		this.location = location;
-	}
 	public Integer getCategory_id() {
 		return category_id;
 	}
 	public void setCategory_id(Integer category_id) {
 		this.category_id = category_id;
 	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
 	public Integer getUser_id() {
 		return user_id;
 	}
 	public void setUser_id(Integer user_id) {
 		this.user_id = user_id;
-	}
-} 
+	}   
+    
+}

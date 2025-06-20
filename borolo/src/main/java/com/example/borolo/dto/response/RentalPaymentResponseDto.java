@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 public class RentalPaymentResponseDto {
 	private String renterNickName;
 	private String itemTitle;
+    private String itemImageUrl;
 	private int pricePerDay;
 	private int depositAmount;
 	private int rentalQuantity;
@@ -17,6 +18,14 @@ public class RentalPaymentResponseDto {
 	private String meetingLocation;
 	private int totalAmount; // 계산된 값
 	
+	
+
+	public String getItemImageUrl() {
+		return itemImageUrl;
+	}
+	public void setItemImageUrl(String itemImageUrl) {
+		this.itemImageUrl = itemImageUrl;
+	}
 	public String getRenterNickName() {
 		return renterNickName;
 	}

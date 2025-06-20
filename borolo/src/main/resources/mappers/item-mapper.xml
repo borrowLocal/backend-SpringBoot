@@ -93,7 +93,8 @@
             quantity = #{quantity},
             image_url = #{image_url},
             item_status = #{item_status},
-            update_time = SYSDATE
+            update_time = SYSDATE , ㄴ
+            category_id = #{category_id}
         WHERE item_id = #{item_id}
     </update>
 

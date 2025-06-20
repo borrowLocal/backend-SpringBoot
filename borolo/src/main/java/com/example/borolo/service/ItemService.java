@@ -10,19 +10,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.borolo.domain.Item;
 import com.example.borolo.domain.User;
 import com.example.borolo.dto.request.RegisterItemRequestDto;
-import com.example.borolo.dto.request.UpdateItemRequestDto;
 import com.example.borolo.dto.response.ItemDetailResponseDto;
 import com.example.borolo.dto.response.ItemListResponseDto;
 import com.example.borolo.dto.response.ItemSummaryDto;
 import com.example.borolo.repository.FavoriteDao;
-
 import com.example.borolo.repository.ItemDao;
 import com.example.borolo.repository.UserDao;
 
@@ -138,20 +135,46 @@ public class ItemService {
 
     
     // 6. 등록 물품 수정 (소유자 확인 포함)
-    public void updateItem(int item_id, UpdateItemRequestDto dto, int user_id) {
+    public void updateItem(int item_id, RegisterItemRequestDto dto, int user_id, MultipartFile file) {
+    	
+    	String imageUrl = null;
+
+    	if (file != null && !file.isEmpty()) {
+    	    try {
+    	        String uploadDir = System.getProperty("user.dir") + "/uploads/images";
+    	        Path uploadPath = Paths.get(uploadDir);
+    	        if (Files.notExists(uploadPath)) {
+    	            Files.createDirectories(uploadPath);
+    	        }
+
+    	        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+    	        Path filepath = uploadPath.resolve(filename);
+    	        Files.copy(file.getInputStream(), filepath, StandardCopyOption.REPLACE_EXISTING);
+
+    	        imageUrl = "/uploads/images/" + filename;
+
+    	    } catch (IOException e) {
+    	        e.printStackTrace();
+    	    }
+    	}
+    	
         Item item = itemDao.findById(item_id);
         if (item == null || !item.getUser_id().equals(user_id)) {
             throw new IllegalArgumentException("수정 권한이 없거나 물품이 존재하지 않습니다.");
         }
 
+        if (imageUrl != null) {
+            item.setImage_url(imageUrl);
+        }
+        
         item.setTitle(dto.getTitle());
         item.setDescription(dto.getDescription());
         item.setPrice_per_day(dto.getPrice_per_day());
         item.setDeposit_amount(dto.getDeposit_amount());
         item.setQuantity(dto.getQuantity());
-        item.setImage_url(dto.getImage_url());
         item.setUpdate_time(LocalDateTime.now());
-
+        item.setCategory_id(dto.getCategory_id());
+        
         itemDao.update(item);
     }
 

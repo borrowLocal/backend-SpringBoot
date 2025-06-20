@@ -10,6 +10,7 @@ public class RentalApplicationListResponseDto {
     private String title;
     private Integer deposit_amount;
     private Integer price_per_day;
+    private String image_url;
     private String rental_status;
     private LocalDate start_date;
     private LocalDate end_date;
@@ -18,7 +19,13 @@ public class RentalApplicationListResponseDto {
     private LocalDateTime meeting_time;
     private String meeting_location;
     private Integer rental_id;
-    
+
+	public String getImage_url() {
+		return image_url;
+	}
+	public void setImage_url(String image_url) {
+		this.image_url = image_url;
+	}
 	public Integer getRental_id() {
 		return rental_id;
 	}

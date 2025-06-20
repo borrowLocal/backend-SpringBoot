@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.borolo.domain.Item;
 import com.example.borolo.dto.request.RegisterItemRequestDto;
-import com.example.borolo.dto.request.UpdateItemRequestDto;
 import com.example.borolo.dto.response.ItemDetailResponseDto;
 import com.example.borolo.dto.response.ItemListResponseDto;
 import com.example.borolo.dto.response.ItemSummaryDto;
@@ -74,7 +73,7 @@ public class ItemController {
     }
 
     //3. 물품 단건 조회 (수정 전 조회)
-    @GetMapping("/rigister/{item_id}")
+    @GetMapping("/register/{item_id}")
     @Operation(summary = "물품 단건 조회")
     public ResponseEntity<Item> getItem(@PathVariable int item_id,
                                         @RequestParam int user_id) {
@@ -87,12 +86,13 @@ public class ItemController {
     }
 
     // 4. 물품 수정
-    @PutMapping("/rigister/{item_id}")
-    @Operation(summary = "물품 수정")
+    @PutMapping(value = "/register/{item_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "물품 수정 (이미지 포함)")
     public ResponseEntity<Void> updateItem(@PathVariable int item_id,
-                                           @RequestBody UpdateItemRequestDto dto) {
+    				@RequestPart("dto") RegisterItemRequestDto dto,
+                    @RequestPart("file") MultipartFile file) {
         try {
-            itemService.updateItem(item_id, dto, dto.getUser_id());
+            itemService.updateItem(item_id, dto, dto.getUser_id(), file);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -100,7 +100,7 @@ public class ItemController {
     }
 
     // 5. 물품 삭제
-    @DeleteMapping("/rigister/{item_id}")
+    @DeleteMapping("/register/{item_id}")
     @Operation(summary = "물품 삭제")
     public ResponseEntity<Void> deleteItem(@PathVariable int item_id,
                                            @RequestParam int user_id) {
