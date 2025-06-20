@@ -55,19 +55,33 @@ public class EmailService {
     public boolean verifyCode(String email, String inputCode) {
         VerificationCodeInfo info = codeStorage.get(email);
         if (info == null) {
+            System.out.println("[인증 실패] 저장된 정보 없음: email=" + email);
             return false;
         }
+
         // 만료시간 체크
-        if (System.currentTimeMillis() - info.getCreatedAt() > EXPIRE_TIME_MS) {
+        long elapsed = System.currentTimeMillis() - info.getCreatedAt();
+        if (elapsed > EXPIRE_TIME_MS) {
+            System.out.println("[인증 실패] 코드 만료됨: email=" + email + ", 경과시간(ms)=" + elapsed);
             codeStorage.remove(email);
-            return false; 
+            return false;
         }
+
+        // 디버깅 로그: 저장된 코드 vs 입력된 코드
+        System.out.println("[인증 시도] email=" + email);
+        System.out.println(" ├─ 저장된 코드: " + info.getCode());
+        System.out.println(" └─ 입력된 코드: " + inputCode);
+
         boolean matched = info.getCode().equals(inputCode);
         if (matched) {
+            System.out.println("[인증 성공]");
             codeStorage.remove(email); 
+        } else {
+            System.out.println("[인증 실패] 코드 불일치");
         }
         return matched;
     }
+
 
     // 인증코드+생성시간 저장용 내부 클래스
     private static class VerificationCodeInfo {

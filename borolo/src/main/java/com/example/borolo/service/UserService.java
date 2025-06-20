@@ -2,23 +2,16 @@ package com.example.borolo.service;
 
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 
 import org.springframework.stereotype.Service;
 
 import com.example.borolo.domain.User;
-import com.example.borolo.dto.request.EmailVerificationRequestDto;
 import com.example.borolo.dto.request.JoinRequestDto;
 import com.example.borolo.dto.request.LoginRequestDto;
 import com.example.borolo.dto.request.PasswordResetRequestDto;
 import com.example.borolo.dto.request.PasswordverificationRequestDto;
 import com.example.borolo.dto.request.UpdateUserProfileRequestDto;
 import com.example.borolo.dto.response.UserProfileResponseDto;
-import com.example.borolo.repository.FavoriteDao;
-import com.example.borolo.repository.ItemDao;
-import com.example.borolo.repository.RentalDao;
 import com.example.borolo.repository.UserDao;
 
 
@@ -27,18 +20,10 @@ import com.example.borolo.repository.UserDao;
 public class UserService {
 
     private final UserDao userDao;
-    private final ItemDao itemDao;
-    private final RentalDao rentalDao;
-    private final FavoriteDao favoriteDao;
 
-    // 인증 코드 저장용
-    private final Map<String, String> verificationMap = new HashMap<>();
-
-    public UserService(UserDao userDao, ItemDao itemDao, RentalDao rentalDao, FavoriteDao favoriteDao) {
+    public UserService(UserDao userDao) {
         this.userDao = userDao;
-        this.itemDao = itemDao;
-        this.rentalDao = rentalDao;
-        this.favoriteDao = favoriteDao;
+
     }
 
     // 1. 회원가입
@@ -81,27 +66,11 @@ public class UserService {
     
     // 3. 비밀번호 재설정
     public void resetPassword(PasswordResetRequestDto dto) {
-        String code = verificationMap.get(dto.getEmail());
-
-        if (code == null || !code.equals(dto.getCode())) {
-            throw new IllegalArgumentException("인증코드가 일치하지 않습니다.");
-        }
-
-        userDao.updatePassword(dto.getEmail(), dto.getNew_password());
-        verificationMap.remove(dto.getEmail());
-    }
-
-    // 4. 이메일 인증코드 발송
-    public void verifyEmailCode(EmailVerificationRequestDto dto) {
-        User user = userDao.findByEmail(dto.getEmail());
-        if (user == null || user.getIs_deleted()) {
-            throw new IllegalArgumentException("가입되지 않은 이메일입니다.");
-        }
-
-        String code = String.valueOf(new Random().nextInt(900000) + 100000); //코드 생성
-        verificationMap.put(dto.getEmail(), code); // 맵에 저장 
-
-        System.out.println("인증코드: " + code);
+	    User user = userDao.findByEmail(dto.getEmail());
+	    if (user == null || user.getIs_deleted()) {
+	        throw new IllegalArgumentException("가입된 사용자가 아닙니다.");
+	    }
+	    userDao.updatePassword(dto.getEmail(), dto.getNew_password());
     }
 
     // 5-1. 마이페이지 정보 조회
@@ -111,17 +80,9 @@ public class UserService {
             throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
         }
 
-        int itemCount = itemDao.countByUserId(user_id);
-        int rentalCount = rentalDao.countByUserId(user_id);
-        int favoriteCount = favoriteDao.countByUserId(user_id);
-
         UserProfileResponseDto dto = new UserProfileResponseDto();
-//        dto.setReal_name(user.getReal_name());
         dto.setNick_name(user.getNick_name());
         dto.setRating(user.getRating());
-//        dto.setItem_count(itemCount);
-//        dto.setRental_count(rentalCount);
-//        dto.setFavorite_count(favoriteCount);
 
         return dto;
     }

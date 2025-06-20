@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.borolo.domain.User;
-import com.example.borolo.dto.request.EmailVerificationRequestDto;
 import com.example.borolo.dto.request.JoinRequestDto;
 import com.example.borolo.dto.request.LoginRequestDto;
 import com.example.borolo.dto.request.PasswordResetRequestDto;
@@ -69,18 +68,6 @@ public class UserController {
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-    }
-
-    // 4. 이메일 인증코드 발송
-    @PostMapping("/email/verify")
-    @Operation(summary = "비밀번호 찾기(이메일 인증코드 발송)")
-    public ResponseEntity<Void> sendResetCode(@RequestBody EmailVerificationRequestDto dto) {
-        try {
-            userService.verifyEmailCode(dto);
-            return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
         }
     }
 

@@ -56,9 +56,6 @@
         SELECT * FROM Item WHERE item_status = '대여 전'
     </select>
 
-    <select id="countByUserId" resultType="int">
-        SELECT COUNT(*) FROM Item WHERE user_id = #{user_id}
-    </select>
 
 	<!-- 위치 기반 전체 물품 조회 + 카테고리 필터링 API -->
 	<select id="findByLocation" parameterType="string" resultType="com.example.borolo.dto.response.ItemListResponseDto">

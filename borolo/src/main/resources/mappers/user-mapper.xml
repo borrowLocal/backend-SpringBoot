@@ -38,7 +38,8 @@
             create_time = #{create_time},
         WHERE user_id = #{user_id}
     </update>
-
+    
+	<!-- 비밀번호 재설정 API -->
     <update id="updatePassword">
         UPDATE users
         SET password = #{password}
