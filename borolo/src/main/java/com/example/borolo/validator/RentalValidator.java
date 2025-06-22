@@ -7,19 +7,16 @@ import org.springframework.validation.Validator;
 import com.example.borolo.domain.Item;
 import com.example.borolo.dto.request.RentalRequestDto;
 import com.example.borolo.repository.ItemDao;
-import com.example.borolo.repository.RentalDao;
 import com.example.borolo.repository.UserDao;
 
 @Component
 public class RentalValidator implements Validator {
     private final ItemDao itemDao;
     private final UserDao userDao;
-    private final RentalDao rentalDao;
 
-    public RentalValidator(ItemDao itemDao, UserDao userDao, RentalDao rentalDao) {
+    public RentalValidator(ItemDao itemDao, UserDao userDao) {
         this.itemDao = itemDao;
         this.userDao = userDao;
-        this.rentalDao = rentalDao; 
     }
     
     @Override

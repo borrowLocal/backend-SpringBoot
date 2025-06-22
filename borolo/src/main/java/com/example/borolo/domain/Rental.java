@@ -4,8 +4,6 @@ package com.example.borolo.domain;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.NotNull;
-
 public class Rental {
     private Integer rental_id;
     private LocalDate start_date;

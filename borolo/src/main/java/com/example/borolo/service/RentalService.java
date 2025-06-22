@@ -13,22 +13,16 @@ import com.example.borolo.dto.response.RentalPaymentResponseDto;
 import com.example.borolo.dto.response.RentalStatusResponseDto;
 import com.example.borolo.repository.ItemDao;
 import com.example.borolo.repository.RentalDao;
-import com.example.borolo.repository.UserDao;
-import com.example.borolo.repository.UserLocationDao;
 
 
 @Service
 public class RentalService {
     private final RentalDao rentalDao;
     private final ItemDao itemDao;
-    private final UserDao userDao;
-    private final UserLocationDao userLocationDao;
     
-    public RentalService(RentalDao rentalDao, ItemDao itemDao, UserDao userDao, UserLocationDao userLocationDao) {
+    public RentalService(RentalDao rentalDao, ItemDao itemDao) {
         this.rentalDao = rentalDao;
         this.itemDao = itemDao;
-        this.userDao = userDao;
-        this.userLocationDao = userLocationDao;
     }
 
     // 1. 대여 신청 (모달)

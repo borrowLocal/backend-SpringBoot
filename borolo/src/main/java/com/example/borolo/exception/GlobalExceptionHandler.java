@@ -9,7 +9,6 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import com.example.borolo.exception.FieldErrorDto;
 
 
 @RestControllerAdvice(basePackages = "com.example.borolo.controller")
