@@ -43,7 +43,6 @@ public class UserService {
         user.setNick_name(dto.getNick_name());
         user.setBirth_date(dto.getBirth_date());
         user.setCreate_time(LocalDateTime.now());
-        user.setIs_deleted(false);
         user.setRating(0.0f);
 
         userDao.insert(user);
@@ -53,7 +52,7 @@ public class UserService {
     public User login(LoginRequestDto dto) {
         User user = userDao.findByEmail(dto.getEmail());
 
-        if (user == null || user.getIs_deleted()) {
+        if (user == null) {
             throw new IllegalArgumentException("존재하지 않는 계정입니다.");
         }
 
@@ -67,7 +66,7 @@ public class UserService {
     // 3. 비밀번호 재설정
     public void resetPassword(PasswordResetRequestDto dto) {
 	    User user = userDao.findByEmail(dto.getEmail());
-	    if (user == null || user.getIs_deleted()) {
+	    if (user == null) {
 	        throw new IllegalArgumentException("가입된 사용자가 아닙니다.");
 	    }
 	    userDao.updatePassword(dto.getEmail(), dto.getNew_password());
@@ -76,7 +75,7 @@ public class UserService {
     // 5-1. 마이페이지 정보 조회
     public UserProfileResponseDto getUserProfile(int user_id) {
         User user = userDao.findById(user_id);
-        if (user == null || user.getIs_deleted()) {
+        if (user == null) {
             throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
         }
 
@@ -90,7 +89,7 @@ public class UserService {
     // 5-2. 개인정보 수정
     public void updateUserProfile(UpdateUserProfileRequestDto dto) {
         User existing = userDao.findById(dto.getUser_id());
-        if (existing == null || existing.getIs_deleted()) {
+        if (existing == null) {
             throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
         }
 
@@ -111,7 +110,7 @@ public class UserService {
 	    public boolean verifyPassword(PasswordverificationRequestDto dto) {
 	        User user = userDao.findById(dto.getUser_id());
 	
-	        if (user == null || user.getIs_deleted()) {
+	        if (user == null) {
 	            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
 	        }
 	
@@ -121,11 +120,10 @@ public class UserService {
     // 7. 회원 탈퇴
     public void deleteUser(int user_id) {
         User user = userDao.findById(user_id);
-        if (user == null || user.getIs_deleted()) {
+        if (user == null) {
             throw new IllegalArgumentException("이미 삭제된 계정이거나 존재하지 않습니다.");
         }
 
-        user.setIs_deleted(true);
         userDao.update(user);
     }
 }
