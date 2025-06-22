@@ -3,6 +3,7 @@ package com.example.borolo.service;
 
 import java.time.LocalDateTime;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.borolo.domain.User;
@@ -20,10 +21,11 @@ import com.example.borolo.repository.UserDao;
 public class UserService {
 
     private final UserDao userDao;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserDao userDao) {
+    public UserService(UserDao userDao, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
-
+        this.passwordEncoder = passwordEncoder;
     }
 
     // 1. 회원가입
@@ -36,9 +38,12 @@ public class UserService {
             throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
         }
 
+        // 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+
         User user = new User();
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
+        user.setPassword(encodedPassword); // 암호화된 비밀번호 저장
         user.setReal_name(dto.getReal_name());
         user.setNick_name(dto.getNick_name());
         user.setBirth_date(dto.getBirth_date());
