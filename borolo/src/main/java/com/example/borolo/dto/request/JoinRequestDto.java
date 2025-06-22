@@ -2,11 +2,32 @@ package com.example.borolo.dto.request;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
+
 public class JoinRequestDto {
+	
+    @NotBlank(message = "이메일은 필수 입력입니다.")
+    @Email(message = "이메일 형식이 올바르지 않습니다.")
     private String email;
+    
+    @NotBlank(message = "비밀번호는 필수 입력입니다.")
+    @Size(min = 4, max = 8, message = "비밀번호는 4~8글자여야 합니다.")
     private String password;
+    
+    @NotBlank(message = "이름은 필수 입력입니다.")
+    @Size(min = 2, max = 6, message = "이름은 2~6글자여야 합니다.")
     private String real_name;
+    
+    @NotBlank(message = "닉네임은 필수 입력입니다.")
+    @Size(min = 2, max = 6, message = "닉네임은 2~6글자여야 합니다.")
     private String nick_name;
+    
+    @NotNull(message = "생년월일은 필수 입력입니다.")
+    @Past(message = "생년월일은 과거 날짜여야 합니다.")
     private LocalDate birth_date;
     
 	public String getEmail() {

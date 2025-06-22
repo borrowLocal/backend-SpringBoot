@@ -22,6 +22,7 @@ import com.example.borolo.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 
 
@@ -38,7 +39,7 @@ public class UserController {
     // 1. 회원가입
     @PostMapping
     @Operation(summary = "회원가입")
-    public ResponseEntity<String> registerUser(@RequestBody JoinRequestDto dto) {
+    public ResponseEntity<String> registerUser(@RequestBody @Valid JoinRequestDto dto) {
         try {
             userService.registerUser(dto);
             return ResponseEntity.ok("회원가입이 완료되었습니다.");
@@ -50,10 +51,10 @@ public class UserController {
     // 2. 로그인
     @PostMapping("/login")
     @Operation(summary = "로그인")
-    public ResponseEntity<Object> login(@RequestBody LoginRequestDto dto) {
+    public ResponseEntity<Object> login(@RequestBody @Valid LoginRequestDto dto) {
         try {
             User user = userService.login(dto);
-            return ResponseEntity.ok(user); // 나중에 LoginResponseDto로 분리 가능
+            return ResponseEntity.ok(user); 
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
@@ -86,7 +87,7 @@ public class UserController {
     // 5-2. 개인정보 수정
     @PutMapping("/{user_id}")
     @Operation(summary = "개인정보 수정")
-    public ResponseEntity<Void> updateProfile(@PathVariable int user_id, @RequestBody UpdateUserProfileRequestDto dto) {
+    public ResponseEntity<Void> updateProfile(@PathVariable int user_id, @RequestBody @Valid UpdateUserProfileRequestDto dto) {
         try {
             if (dto.getUser_id() == null || !dto.getUser_id().equals(user_id)) {
                 throw new IllegalArgumentException("잘못된 접근입니다.");
