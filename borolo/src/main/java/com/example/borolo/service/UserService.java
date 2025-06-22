@@ -3,7 +3,6 @@ package com.example.borolo.service;
 
 import java.time.LocalDateTime;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.borolo.domain.User;
@@ -21,11 +20,9 @@ import com.example.borolo.repository.UserDao;
 public class UserService {
 
     private final UserDao userDao;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserDao userDao, PasswordEncoder passwordEncoder) {
+    public UserService(UserDao userDao) {
         this.userDao = userDao;
-        this.passwordEncoder = passwordEncoder;
     }
 
     // 1. 회원가입
@@ -41,13 +38,11 @@ public class UserService {
         if (dto.getNick_name().equals(dto.getReal_name())) {
             throw new IllegalArgumentException("닉네임과 이름은 같을 수 없습니다.");
         }
-        
-        // 비밀번호 암호화
-        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+
 
         User user = new User();
         user.setEmail(dto.getEmail());
-        user.setPassword(encodedPassword); // 암호화된 비밀번호 저장
+        user.setPassword(dto.getPassword());
         user.setReal_name(dto.getReal_name());
         user.setNick_name(dto.getNick_name());
         user.setBirth_date(dto.getBirth_date());
