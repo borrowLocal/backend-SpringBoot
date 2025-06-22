@@ -42,8 +42,23 @@
 	<!-- 비밀번호 재설정 API -->
     <update id="updatePassword">
         UPDATE users
-        SET password = #{password}
+        SET password = #{password, jdbcType=VARCHAR}
         WHERE email = #{email}
     </update>
 
+	<!-- 회원 탈퇴 -->
+	<delete id="deleteUser" parameterType="int">
+        DELETE FROM users u
+	    WHERE u.user_id = #{user_id}
+	      AND NOT EXISTS (
+	        SELECT 1 FROM item i
+	        WHERE i.user_id = u.user_id
+	          AND i.item_status = '대여중'
+	      )
+	      AND NOT EXISTS (
+	        SELECT 1 FROM rental r
+	        WHERE r.user_id = u.user_id
+	          AND r.rental_status = '대여중'
+	      )
+	</delete>
 </mapper>

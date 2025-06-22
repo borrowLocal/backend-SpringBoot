@@ -14,4 +14,5 @@ public interface UserDao {
     void insert(User user);
     void update(User user);
     void updatePassword(@Param("email") String email, @Param("password") String password);
+    int deleteUser(@Param("user_id") int user_id);
 }
