@@ -107,16 +107,16 @@ public class UserService {
         userDao.update(existing);
     }
 
-	    // 6. 비밀번호 확인
-	    public boolean verifyPassword(PasswordverificationRequestDto dto) {
-	        User user = userDao.findById(dto.getUser_id());
-	
-	        if (user == null || user.getIs_deleted()) {
-	            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
-	        }
-	
-	        return user.getPassword().equals(dto.getPassword());
-	    }
+    // 6. 비밀번호 확인
+    public boolean verifyPassword(PasswordverificationRequestDto dto) {
+        User user = userDao.findById(dto.getUser_id());
+
+        if (user == null || user.getIs_deleted()) {
+            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
+        }
+
+        return user.getPassword().equals(dto.getPassword());
+    }
 
     // 7. 회원 탈퇴
     public void deleteUser(int user_id) {
