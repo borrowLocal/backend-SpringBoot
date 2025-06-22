@@ -27,6 +27,7 @@ import com.example.borolo.service.RentalService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 
 
@@ -47,7 +48,7 @@ public class ItemController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "물품 등록 (이미지 포함)")
     public ResponseEntity<Void> registerItem(
-            @RequestPart("dto") RegisterItemRequestDto dto,
+            @RequestPart("dto") @Valid RegisterItemRequestDto dto,
             @RequestPart("file") MultipartFile file) {
     	
         System.out.println("==== DTO 값 확인 ====");
@@ -88,7 +89,7 @@ public class ItemController {
     @PutMapping(value = "/register/{item_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "물품 수정 (이미지 포함)")
     public ResponseEntity<Void> updateItem(@PathVariable int item_id,
-    				@RequestPart("dto") RegisterItemRequestDto dto,
+    				@RequestPart("dto") @Valid RegisterItemRequestDto dto,
                     @RequestPart(value = "file", required = false) MultipartFile file) {
         try {
             itemService.updateItem(item_id, dto, dto.getUser_id(), file);

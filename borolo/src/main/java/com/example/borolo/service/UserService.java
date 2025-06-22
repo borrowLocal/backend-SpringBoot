@@ -38,6 +38,10 @@ public class UserService {
             throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
         }
 
+        if (dto.getNick_name().equals(dto.getReal_name())) {
+            throw new IllegalArgumentException("닉네임과 이름은 같을 수 없습니다.");
+        }
+        
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
 
