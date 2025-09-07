@@ -38,8 +38,9 @@
 
 ### 📦 Build & Dependency Management
 ![Maven](https://img.shields.io/badge/Maven-3.9.0-C71A36?logo=apachemaven&logoColor=white)  
-- 빌드 및 의존성 관리 도구  
+- 빌드 및 의존성 관리 도구
 
+---
 
 ### 🌐 Web & API
 ![Spring Web](https://img.shields.io/badge/Spring%20Web-6DB33F?logo=spring&logoColor=white)  
@@ -54,6 +55,7 @@
 ![OpenAPI](https://img.shields.io/badge/OpenAPI-6BA539?logo=openapiinitiative&logoColor=white)  
 - Swagger 기반 API 문서화  
 
+<hr style="border:1px solid #ccc">
 
 ## 🏗 시스템 아키텍처
 ```plaintext
