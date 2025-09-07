@@ -1,4 +1,4 @@
-# 📌 Borolo Backend
+# Borolo Backend
 
 > Spring Boot 기반 백엔드 애플리케이션  
 > 사용자 관리, 아이템 대여, 결제 등 주요 도메인을 다루는 프로젝트입니다.  
