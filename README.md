@@ -25,41 +25,39 @@
 ## 🛠 Tech Stack
 
 ### 💻 Backend
-&nbsp;&nbsp;![Java](https://img.shields.io/badge/Java-17-007396?logo=java&logoColor=white)  
-&nbsp;&nbsp;- 프로젝트 메인 언어  
+&nbsp;&nbsp;&nbsp;![Java](https://img.shields.io/badge/Java-17-007396?logo=java&logoColor=white)  
+&nbsp;&nbsp;&nbsp;- 프로젝트 메인 언어  
 
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.5-6DB33F?logo=springboot)  
-- 백엔드 프레임워크, 내장 서버 기반 빠른 개발 환경 제공  
+&nbsp;&nbsp;&nbsp;![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.5-6DB33F?logo=springboot)  
+&nbsp;&nbsp;&nbsp;- 백엔드 프레임워크, 내장 서버 기반 빠른 개발 환경 제공  
 
-![MyBatis](https://img.shields.io/badge/MyBatis-000000?logo=java&logoColor=white)  
-- SQL 매퍼 프레임워크, 세밀한 쿼리 제어  
+&nbsp;&nbsp;&nbsp;![MyBatis](https://img.shields.io/badge/MyBatis-000000?logo=java&logoColor=white)  
+&nbsp;&nbsp;&nbsp;- SQL 매퍼 프레임워크, 세밀한 쿼리 제어  
 
-• • •
 
 ### 🗄 Database
-![Oracle](https://img.shields.io/badge/Oracle%20DB-F80000?logo=oracle&logoColor=white)  
-- 메인 데이터베이스, 안정적인 데이터 관리  
+&nbsp;&nbsp;&nbsp;![Oracle](https://img.shields.io/badge/Oracle%20DB-F80000?logo=oracle&logoColor=white)  
+&nbsp;&nbsp;&nbsp;- 메인 데이터베이스, 안정적인 데이터 관리  
 
-• • •
 
 ### 📦 Build & Dependency Management
-![Maven](https://img.shields.io/badge/Maven-3.9.0-C71A36?logo=apachemaven&logoColor=white)  
-- 빌드 및 의존성 관리 도구
+&nbsp;&nbsp;&nbsp;![Maven](https://img.shields.io/badge/Maven-3.9.0-C71A36?logo=apachemaven&logoColor=white)  
+&nbsp;&nbsp;&nbsp;- 빌드 및 의존성 관리 도구
 
 • • •
 
 ### 🌐 Web & API
-![Spring Web](https://img.shields.io/badge/Spring%20Web-6DB33F?logo=spring&logoColor=white)  
-- RESTful API 설계 및 구현  
+&nbsp;&nbsp;&nbsp;![Spring Web](https://img.shields.io/badge/Spring%20Web-6DB33F?logo=spring&logoColor=white)  
+&nbsp;&nbsp;&nbsp;- RESTful API 설계 및 구현  
 
-![Validation](https://img.shields.io/badge/Validation-FF6F00?logo=checkmarx&logoColor=white)  
-- 입력값 검증 및 유효성 체크  
+&nbsp;&nbsp;&nbsp;![Validation](https://img.shields.io/badge/Validation-FF6F00?logo=checkmarx&logoColor=white)  
+&nbsp;&nbsp;&nbsp;- 입력값 검증 및 유효성 체크  
 
-![Spring Mail](https://img.shields.io/badge/Spring%20Mail-007396?logo=gmail&logoColor=white)  
-- 회원가입, 알림 등 메일 발송 기능  
+&nbsp;&nbsp;&nbsp;![Spring Mail](https://img.shields.io/badge/Spring%20Mail-007396?logo=gmail&logoColor=white)  
+&nbsp;&nbsp;&nbsp;- 회원가입, 알림 등 메일 발송 기능  
 
-![OpenAPI](https://img.shields.io/badge/OpenAPI-6BA539?logo=openapiinitiative&logoColor=white)  
-- Swagger 기반 API 문서화  
+&nbsp;&nbsp;&nbsp;![OpenAPI](https://img.shields.io/badge/OpenAPI-6BA539?logo=openapiinitiative&logoColor=white)  
+&nbsp;&nbsp;&nbsp;- Swagger 기반 API 문서화  
 
 <br>
 
