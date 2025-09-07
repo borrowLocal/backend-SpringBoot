@@ -55,7 +55,7 @@
 ![OpenAPI](https://img.shields.io/badge/OpenAPI-6BA539?logo=openapiinitiative&logoColor=white)  
 - Swagger 기반 API 문서화  
 
-<hr style="border:0.5px solid #ccc">
+<hr style="border: 0.1px solid #ccc">
 
 ## 🏗 시스템 아키텍처
 ```plaintext
