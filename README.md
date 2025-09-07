@@ -24,7 +24,7 @@
 
 ## 🛠 Tech Stack
 
-### 💻 Backend
+### Backend
 &nbsp;&nbsp;&nbsp;![Java](https://img.shields.io/badge/Java-17-007396?logo=java&logoColor=white)  
 &nbsp;&nbsp;&nbsp;- 프로젝트 메인 언어  
 
@@ -35,18 +35,18 @@
 &nbsp;&nbsp;&nbsp;- SQL 매퍼 프레임워크, 세밀한 쿼리 제어  
 
 
-### 🗄 Database
+### Database
 &nbsp;&nbsp;&nbsp;![Oracle](https://img.shields.io/badge/Oracle%20DB-F80000?logo=oracle&logoColor=white)  
 &nbsp;&nbsp;&nbsp;- 메인 데이터베이스, 안정적인 데이터 관리  
 
 
-### 📦 Build & Dependency Management
+### Build & Dependency Management
 &nbsp;&nbsp;&nbsp;![Maven](https://img.shields.io/badge/Maven-3.9.0-C71A36?logo=apachemaven&logoColor=white)  
 &nbsp;&nbsp;&nbsp;- 빌드 및 의존성 관리 도구
 
 • • •
 
-### 🌐 Web & API
+### Web & API
 &nbsp;&nbsp;&nbsp;![Spring Web](https://img.shields.io/badge/Spring%20Web-6DB33F?logo=spring&logoColor=white)  
 &nbsp;&nbsp;&nbsp;- RESTful API 설계 및 구현  
 
