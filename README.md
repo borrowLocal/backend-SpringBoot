@@ -1,16 +1,24 @@
 # Borolo Backend
 
-> Spring Boot 기반 백엔드 애플리케이션  
-> 사용자 관리, 아이템 대여, 결제 등 주요 도메인을 다루는 프로젝트입니다.  
+> Spring Boot 기반 백엔드 웹서비스  
+> 대여인과 대여자의 아이템 거래를 지원하며, 회원과 상태관리, 알림 기능을 갖춘 백엔드 서비스입니다.
 
 ---
 
-## 👩🏻‍🏫 프로젝트 소개
+## 🙌🏻 프로젝트 소개
 - Java 17 & Spring Boot 3.4.5 기반 백엔드 서비스
 - Oracle DB와 MyBatis를 활용한 안정적인 데이터 관리
 - RESTful API 아키텍처
 - Spring Mail을 이용한 알림/메일 발송 기능
 - OpenAPI(Swagger UI) 기반 API 문서화 제공
+
+---
+
+## 📑 주요 기능
+- 회원 관리: 회원가입, 로그인, 탈퇴, 이메일 인증  
+- 대여인(Borrower): 물품 조회·검색, 대여 신청 및 결제, 반납, 리뷰 작성  
+- 대여자(Renter): 물품 등록·관리, 대여 신청 수락/거절, 상태 관리  
+- 공통: 이메일 발송, REST API 문서화 (Swagger UI)  
 
 ---
 
@@ -62,3 +70,10 @@
                        [Spring Mail]
                            ⇂
                       [OpenAPI/Swagger]
+
+---
+
+## 🗂 추가 자료
+- ERD: ![ERD](docs/ERD.png) [전체 ERD 보기](docs/ERD.png)  
+- Use Case: ![Use Case](docs/usecase.png) [자세히 보기](docs/usecase.png)  
+- 파일 구조: ![File Structure](docs/file-structure.png) [전체 보기](docs/file-structure.png)
