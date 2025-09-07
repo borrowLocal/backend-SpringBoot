@@ -34,19 +34,19 @@
 ![MyBatis](https://img.shields.io/badge/MyBatis-000000?logo=java&logoColor=white)  
 - SQL 매퍼 프레임워크, 세밀한 쿼리 제어  
 
----
+
 
 ### 🗄 Database
 ![Oracle](https://img.shields.io/badge/Oracle%20DB-F80000?logo=oracle&logoColor=white)  
 - 메인 데이터베이스, 안정적인 데이터 관리  
 
----
+<br>
 
 ### 📦 Build & Dependency Management
 ![Maven](https://img.shields.io/badge/Maven-3.9.0-C71A36?logo=apachemaven&logoColor=white)  
 - 빌드 및 의존성 관리 도구
 
----
+<br>
 
 ### 🌐 Web & API
 ![Spring Web](https://img.shields.io/badge/Spring%20Web-6DB33F?logo=spring&logoColor=white)  
