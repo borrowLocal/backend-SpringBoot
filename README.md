@@ -25,8 +25,8 @@
 ## 🛠 Tech Stack
 
 ### 💻 Backend
-![Java](https://img.shields.io/badge/Java-17-007396?logo=java&logoColor=white)  
-- 프로젝트 메인 언어  
+&nbsp;&nbsp;![Java](https://img.shields.io/badge/Java-17-007396?logo=java&logoColor=white)  
+&nbsp;&nbsp;- 프로젝트 메인 언어  
 
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.5-6DB33F?logo=springboot)  
 - 백엔드 프레임워크, 내장 서버 기반 빠른 개발 환경 제공  
