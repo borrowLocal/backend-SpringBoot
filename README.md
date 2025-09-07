@@ -44,7 +44,6 @@
 &nbsp;&nbsp;&nbsp;![Maven](https://img.shields.io/badge/Maven-3.9.0-C71A36?logo=apachemaven&logoColor=white)  
 &nbsp;&nbsp;&nbsp;- 빌드 및 의존성 관리 도구
 
-• • •
 
 ### Web & API
 &nbsp;&nbsp;&nbsp;![Spring Web](https://img.shields.io/badge/Spring%20Web-6DB33F?logo=spring&logoColor=white)  
