@@ -26,7 +26,7 @@
 
 ### 💻 Backend
 ![Java](https://img.shields.io/badge/Java-17-007396?logo=java&logoColor=white)  
-> 프로젝트 메인 언어  
+- 프로젝트 메인 언어  
 
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.5-6DB33F?logo=springboot)  
 - 백엔드 프레임워크, 내장 서버 기반 빠른 개발 환경 제공  
@@ -72,8 +72,3 @@
                       [OpenAPI/Swagger]
 
 ``` 
-
-## 🗂 추가 자료
-- ERD: ![ERD](docs/ERD.png) [전체 ERD 보기](docs/ERD.png)  
-- Use Case: ![Use Case](docs/usecase.png) [자세히 보기](docs/usecase.png)  
-- 파일 구조: ![File Structure](docs/file-structure.png) [전체 보기](docs/file-structure.png)
